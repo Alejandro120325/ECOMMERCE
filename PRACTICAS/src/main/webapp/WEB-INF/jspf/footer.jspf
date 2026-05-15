@@ -1,0 +1,14 @@
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
+<%-- footer.jspf — Pie de página común --%>
+<footer>
+    <div class="footer-container">
+        <div class="logo">
+            <i class="fas fa-book-open" style="color:var(--color-acento);"></i>
+            <strong style="color:var(--color-acento);font-family:'Playfair Display',serif;font-size:1.3rem;">FOLIO</strong>
+        </div>
+        <p class="footer-copyright">
+            &copy; <%= java.time.Year.now() %> FOLIO Biblioteca Digital &middot; Todos los derechos reservados &middot;
+            Desarrollado por Jairo Alejandro Ojeda Herrera
+        </p>
+    </div>
+</footer>

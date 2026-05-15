@@ -1,39 +1,110 @@
-target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
-.kotlin
+# =====================================================================
+# FOLIO - .gitignore
+# ---------------------------------------------------------------------
+# Mantén el repo limpio: sólo código fuente, recursos y documentación.
+# Nada de binarios compilados, configuraciones locales del IDE, ni
+# documentos personales del usuario que orbitan el proyecto.
+# =====================================================================
 
-### IntelliJ IDEA ###
-.idea/modules.xml
-.idea/jarRepositories.xml
-.idea/compiler.xml
-.idea/libraries/
-*.iws
+# ----- Build / Maven -------------------------------------------------
+target/
+build/
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+*.tar
+*.gz
+!.mvn/wrapper/maven-wrapper.jar
+hs_err_pid*.log
+
+# ----- IntelliJ IDEA -------------------------------------------------
+.idea/
 *.iml
 *.ipr
+*.iws
+out/
 
-### Eclipse ###
-.apt_generated
+# ----- Eclipse / STS -------------------------------------------------
 .classpath
-.factorypath
 .project
-.settings
+.settings/
+.apt_generated/
+.factorypath
 .springBeans
-.sts4-cache
+.sts4-cache/
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
+# ----- NetBeans ------------------------------------------------------
+nbproject/private/
+nbbuild/
+nbdist/
+.nb-gradle/
 
-### VS Code ###
+# ----- VS Code -------------------------------------------------------
 .vscode/
 
-### Mac OS ###
+# ----- Tomcat embebido / SmartTomcat / runners locales --------------
+.smarttomcat/
+.ollamassist/
+.tomcat/
+catalina.base/
+work/
+logs/
+*.log
+
+# ----- OS junk -------------------------------------------------------
 .DS_Store
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+# ----- Entornos virtuales / dependencias --------------------------
+node_modules/
+.venv/
+__pycache__/
+
+# ----- Configuración local y secretos -------------------------------
+*.local.properties
+application-local.*
+.env
+.env.local
+secrets.properties
+
+# ----- Subidas en desarrollo ----------------------------------------
+src/main/webapp/uploads/*
+!src/main/webapp/uploads/.gitkeep
+
+# ----- Documentos personales NO relacionados al software ------------
+# (Mantener fuera del repositorio: PDFs, Word, videos, tareas, etc.)
+*.docx
+*.pdf
+*.mp4
+*.mov
+*.mkv
+*.pptx
+*.xlsx
+"CURSO PREGUNTAS.docx"
+"Tarea*"
+"Taller*"
+"Gu*a de Estudio*"
+"Museo*"
+"Tarea 3 - Intercambio de Datos/"
+
+# ----- Bases de datos locales / dumps -------------------------------
+*.sqlite
+*.sqlite3
+*.db
+*.dump
+*.bak
+
+# ----- Agentes de IA / herramientas accesorias ---------------------
+.claude/
+.cursor/
+.aider*
+
+# ----- Cobertura y reportes ----------------------------------------
+.coverage
+.jacoco/
+jacoco.exec
+surefire-reports/
