@@ -1,0 +1,85 @@
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
+<%--
+    header.jspf
+    Fragmento reutilizable del encabezado de FOLIO.
+    -----------------------------------------------
+    * El menú desplegable de categorías se abre por hover/focus puro CSS
+      (sin JavaScript).
+    * El botón "Carrito" es un enlace que vuelve a la página actual
+      añadiendo carrito=open para abrir el drawer renderizado por el
+      servidor.
+    * Variables esperadas en el scope:
+        - usrActivo  : ec.edu.ups.modelo.Usuario o null
+        - urlActual  : URL del recurso que incluye este header (para
+                       construir el href del botón carrito y los redirect
+                       de los formularios "añadir al carrito").
+--%>
+<header>
+    <div class="header-container">
+        <a href="index.jsp" class="logo" aria-label="Inicio FOLIO">
+            <i class="fas fa-book-open fa-2x" style="color:var(--color-acento);"></i>
+            <div>
+                <h1>FO<span>L</span>IO</h1>
+                <span class="logo-subtitle">Biblioteca Digital · Premium</span>
+            </div>
+        </a>
+
+        <nav aria-label="Menú principal">
+            <ul>
+                <li><a href="index.jsp"><i class="fas fa-home"></i> Home</a></li>
+
+                <li class="dropdown">
+                    <a href="FiltrarLibrosServlet?categoria=todas" tabindex="0">
+                        <i class="fas fa-book"></i> Catálogo <i class="fas fa-chevron-down" style="font-size:0.8em;"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-categorias">
+                        <li><a href="FiltrarLibrosServlet?categoria=latinoamericana"><i class="fas fa-leaf"></i> Latinoamericana</a></li>
+                        <li><a href="FiltrarLibrosServlet?categoria=clasicos"><i class="fas fa-feather"></i> Clásicos Mundiales</a></li>
+                        <li><a href="FiltrarLibrosServlet?categoria=ciencia"><i class="fas fa-rocket"></i> Ciencia Ficción</a></li>
+                        <li class="separator"></li>
+                        <li><a href="FiltrarLibrosServlet?categoria=tecnologia"><i class="fas fa-microchip"></i> Tecnología e Ingeniería</a></li>
+                        <li><a href="FiltrarLibrosServlet?categoria=historia"><i class="fas fa-landmark"></i> Historia y Filosofía</a></li>
+                        <li><a href="FiltrarLibrosServlet?categoria=fantasia"><i class="fas fa-dragon"></i> Fantasía y Épica</a></li>
+                        <li><a href="FiltrarLibrosServlet?categoria=biografias"><i class="fas fa-user-tie"></i> Biografías</a></li>
+                        <li><a href="FiltrarLibrosServlet?categoria=desarrollo"><i class="fas fa-seedling"></i> Desarrollo Personal</a></li>
+                        <li><a href="FiltrarLibrosServlet?categoria=manga"><i class="fas fa-torii-gate"></i> Manga</a></li>
+                    </ul>
+                </li>
+
+                <li><a href="contacto.jsp"><i class="fas fa-envelope"></i> Contacto</a></li>
+
+                <% if (usrActivo != null) { %>
+                <li class="dropdown">
+                    <a href="#" tabindex="0" class="link-perfil">
+                        <i class="fas fa-user-circle"></i> <%= usrActivo.getNombre() %>
+                        <i class="fas fa-chevron-down" style="font-size:0.8em;"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <% if ("ADMIN".equalsIgnoreCase(usrActivo.getRol())) { %>
+                        <li><a href="admin.jsp"><i class="fas fa-crown"></i> Dashboard Admin</a></li>
+                        <% } else if ("EMPLEADO".equalsIgnoreCase(usrActivo.getRol())) { %>
+                        <li><a href="empleado.jsp"><i class="fas fa-boxes"></i> Inventario</a></li>
+                        <% } %>
+                        <li><a href="LogoutServlet"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
+                    </ul>
+                </li>
+                <% } else { %>
+                <li><a href="login.jsp" class="btn-nav"><i class="fas fa-user"></i> Ingresar</a></li>
+                <li><a href="registro.jsp" class="btn-nav"><i class="fas fa-user-plus"></i> Registro</a></li>
+                <% } %>
+
+                <li>
+                    <a href="<%= urlActual %><%= urlActual.contains("?") ? "&" : "?" %>carrito=open#carrito-drawer"
+                       class="btn-carrito" aria-label="Abrir carrito">
+                        <i class="fas fa-shopping-basket"></i>
+                        <% if (carrito != null && !carrito.estaVacio()) { %>
+                        <span class="carrito-badge visible"><%= carrito.getCantidadItems() %></span>
+                        <% } else { %>
+                        <span class="carrito-badge">0</span>
+                        <% } %>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</header>

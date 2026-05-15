@@ -1,0 +1,139 @@
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
+<%--
+    carrito-drawer.jspf
+    -----------------------------------------------------------------
+    Drawer lateral del carrito de compras renderizado en el servidor.
+
+    Variables esperadas en el scope (las inyecta la JSP host):
+      * carrito          : ec.edu.ups.modelo.Carrito de la sesión
+      * urlActual        : URL del recurso actual (para los redirect)
+      * mostrarDrawer    : boolean — si la URL trae ?carrito=open
+
+    Sin AJAX ni JavaScript:
+      * Cada "+", "-", "Eliminar" es un <form method="POST"> al
+        CarritoServlet con un hidden "redirect" que conserva la
+        página de origen y un "carrito=open" que mantiene el panel
+        visible tras el sendRedirect.
+      * El overlay y el botón "Cerrar" son enlaces a la página actual
+        sin el parámetro carrito=open.
+--%>
+<%
+    String urlSinDrawer  = urlActual;       // URL para cerrar el drawer
+    String urlConDrawer  = urlActual + (urlActual.contains("?") ? "&" : "?") + "carrito=open";
+%>
+
+<%-- Overlay oscuro: clic = cerrar --%>
+<a href="<%= urlSinDrawer %>"
+   class="carrito-overlay <%= mostrarDrawer ? "abierto" : "" %>"
+   aria-label="Cerrar carrito" tabindex="-1"></a>
+
+<aside id="carrito-drawer"
+       class="carrito-panel <%= mostrarDrawer ? "abierto" : "" %>"
+       aria-label="Carrito de compras">
+
+    <div class="carrito-header">
+        <div>
+            <h3><i class="fas fa-shopping-basket"></i> Tu carrito</h3>
+            <div class="carrito-usuario">Sesión segura &middot; Servidor Java EE</div>
+        </div>
+        <a href="<%= urlSinDrawer %>" class="btn-cerrar-carrito" aria-label="Cerrar">
+            <i class="fas fa-times"></i>
+        </a>
+    </div>
+
+    <div class="carrito-items">
+        <%
+            if (carrito == null || carrito.estaVacio()) {
+        %>
+        <div class="carrito-vacio">
+            <i class="fas fa-book-open"></i>
+            <p><strong>Tu carrito está vacío</strong></p>
+            <p>Explora nuestro catálogo y añade tus próximas lecturas.</p>
+        </div>
+        <%
+        } else {
+            for (ec.edu.ups.modelo.ItemCarrito it : carrito.getItems()) {
+                String idLibro = it.getLibro().getId();
+        %>
+        <div class="carrito-item">
+            <img src="<%= it.getLibro().getImagen() %>" alt="">
+            <div class="info">
+                <h5><%= it.getLibro().getTitulo() %></h5>
+                <p class="autor"><%= it.getLibro().getAutor() %></p>
+                <span class="precio-item">$ <%= String.format(java.util.Locale.US, "%.2f", it.getSubtotal()) %></span>
+
+                <div class="qty">
+                    <%-- Disminuir cantidad --%>
+                    <form action="CarritoServlet" method="POST" class="form-qty">
+                        <input type="hidden" name="accion"   value="DISMINUIR_CANTIDAD">
+                        <input type="hidden" name="libroId"  value="<%= idLibro %>">
+                        <input type="hidden" name="redirect" value="<%= urlActual %>">
+                        <input type="hidden" name="carrito"  value="open">
+                        <button type="submit" aria-label="Disminuir">−</button>
+                    </form>
+                    <span><%= it.getCantidad() %></span>
+                    <%-- Aumentar cantidad --%>
+                    <form action="CarritoServlet" method="POST" class="form-qty">
+                        <input type="hidden" name="accion"   value="AUMENTAR_CANTIDAD">
+                        <input type="hidden" name="libroId"  value="<%= idLibro %>">
+                        <input type="hidden" name="redirect" value="<%= urlActual %>">
+                        <input type="hidden" name="carrito"  value="open">
+                        <button type="submit" aria-label="Aumentar">+</button>
+                    </form>
+                </div>
+            </div>
+
+            <%-- Eliminar línea completa --%>
+            <form action="CarritoServlet" method="POST" class="form-eliminar">
+                <input type="hidden" name="accion"   value="ELIMINAR_LIBRO">
+                <input type="hidden" name="libroId"  value="<%= idLibro %>">
+                <input type="hidden" name="redirect" value="<%= urlActual %>">
+                <input type="hidden" name="carrito"  value="open">
+                <button type="submit" class="btn-eliminar" aria-label="Eliminar">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </form>
+        </div>
+        <%
+            }
+        }
+        %>
+    </div>
+
+    <div class="carrito-footer">
+        <%
+            double subtotal = (carrito == null) ? 0 : carrito.getSubtotal();
+            double iva      = (carrito == null) ? 0 : carrito.getIva();
+            double total    = (carrito == null) ? 0 : carrito.getTotal();
+            int    pctIva   = (int) Math.round(ec.edu.ups.modelo.Carrito.IVA_PORCENTAJE * 100);
+        %>
+        <div class="carrito-resumen">
+            <div class="linea-resumen">
+                <span>Subtotal</span>
+                <span class="subtotal-valor">$ <%= String.format(java.util.Locale.US, "%.2f", subtotal) %></span>
+            </div>
+            <div class="linea-resumen">
+                <span>IVA (<%= pctIva %>%)</span>
+                <span class="iva-valor">$ <%= String.format(java.util.Locale.US, "%.2f", iva) %></span>
+            </div>
+            <div class="linea-resumen total">
+                <span>Total</span>
+                <span class="total-valor">$ <%= String.format(java.util.Locale.US, "%.2f", total) %></span>
+            </div>
+        </div>
+
+        <%-- Botón finalizar compra: lleva al formulario de pago --%>
+        <a href="pago.jsp" class="btn-comprar
+                <%= (carrito == null || carrito.estaVacio()) ? "deshabilitado" : "" %>">
+            <i class="fas fa-credit-card"></i> Finalizar compra
+        </a>
+
+        <%-- Botón vaciar carrito (form para soportar limpieza atómica server-side) --%>
+        <form action="CarritoServlet" method="POST">
+            <input type="hidden" name="accion"   value="VACIAR">
+            <input type="hidden" name="redirect" value="<%= urlActual %>">
+            <input type="hidden" name="carrito"  value="open">
+            <button type="submit" class="btn-vaciar">Vaciar carrito</button>
+        </form>
+    </div>
+</aside>
