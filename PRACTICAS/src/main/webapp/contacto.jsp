@@ -17,12 +17,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contacto &middot; FOLIO</title>
-    <link rel="stylesheet" href="css/estilos.css?v=40">
+    <link rel="stylesheet" href="css/estilos.css?v=60">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
-<body>
+<body class="${empty sessionScope.tema ? 'dark' : sessionScope.tema}">
 
 <%@ include file="WEB-INF/jspf/header.jspf" %>
 
@@ -37,12 +37,36 @@
                         width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
 
-            <h3 style="margin-top:2rem;">Nuestras Redes Sociales</h3>
-            <div class="redes-contacto">
-                <a href="#"><i class="fab fa-facebook-f"></i> FOLIO Oficial</a>
-                <a href="#"><i class="fab fa-instagram"></i> @folio.ec</a>
-                <a href="#"><i class="fab fa-twitter"></i> @FolioLibros</a>
-                <a href="mailto:contacto@folio.ec"><i class="fas fa-envelope"></i> contacto@folio.ec</a>
+            <h3 style="margin-top:2.5rem;">Nuestras Redes Sociales</h3>
+            <p style="color:var(--color-texto-suave); margin-bottom:1.2rem;">
+                Sigue nuestras novedades, recomendaciones del editor y promociones semanales.
+            </p>
+
+            <div class="redes-premium" role="list">
+                <a href="https://facebook.com" target="_blank" rel="noopener" class="red-card red-fb" role="listitem">
+                    <span class="red-icon"><i class="fab fa-facebook-f"></i></span>
+                    <span class="red-info"><strong>Facebook</strong><small>FOLIO Oficial</small></span>
+                </a>
+                <a href="https://instagram.com" target="_blank" rel="noopener" class="red-card red-ig" role="listitem">
+                    <span class="red-icon"><i class="fab fa-instagram"></i></span>
+                    <span class="red-info"><strong>Instagram</strong><small>@folio.ec</small></span>
+                </a>
+                <a href="https://x.com" target="_blank" rel="noopener" class="red-card red-x" role="listitem">
+                    <span class="red-icon"><i class="fa-brands fa-x-twitter"></i></span>
+                    <span class="red-info"><strong>X (Twitter)</strong><small>@FolioLibros</small></span>
+                </a>
+                <a href="https://wa.me/593990000000" target="_blank" rel="noopener" class="red-card red-wa" role="listitem">
+                    <span class="red-icon"><i class="fab fa-whatsapp"></i></span>
+                    <span class="red-info"><strong>WhatsApp</strong><small>+593 99 000 0000</small></span>
+                </a>
+                <a href="https://tiktok.com" target="_blank" rel="noopener" class="red-card red-tk" role="listitem">
+                    <span class="red-icon"><i class="fab fa-tiktok"></i></span>
+                    <span class="red-info"><strong>TikTok</strong><small>@folio.libros</small></span>
+                </a>
+                <a href="mailto:contacto@folio.ec" class="red-card red-mail" role="listitem">
+                    <span class="red-icon"><i class="fas fa-envelope"></i></span>
+                    <span class="red-info"><strong>Email</strong><small>contacto@folio.ec</small></span>
+                </a>
             </div>
         </article>
     </section>

@@ -39,6 +39,13 @@ public class LibroDAO {
             "SELECT id, titulo, autor, precio, imagen, paginas, categoria " +
             "FROM tb_libro WHERE id = ?";
 
+    private static final String SQL_INSERT =
+            "INSERT INTO tb_libro (id, titulo, autor, isbn, precio, stock, imagen, paginas, categoria) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+    private static final String SQL_DELETE =
+            "DELETE FROM tb_libro WHERE id = ?";
+
     // ------------------------------------------------------------------
     // API pública
     // ------------------------------------------------------------------
@@ -102,6 +109,88 @@ public class LibroDAO {
         } catch (SQLException ex) {
             System.err.println("[LibroDAO] buscarPorId() -> fallback memoria: " + ex.getMessage());
             return CatalogoLibros.getInstancia().buscarPorId(id);
+        }
+    }
+
+    /**
+     * Inserta un libro nuevo. Recibe también el ISBN y stock que no
+     * están en el modelo {@link Libro}; el servlet de admin los
+     * pasa como parámetros explícitos.
+     */
+    public boolean insertar(Libro libro, String isbn, int stock) {
+        if (libro == null) return false;
+        try (Connection con = Conexion.getConnection();
+             PreparedStatement ps = con.prepareStatement(SQL_INSERT)) {
+            ps.setString(1, libro.getId());
+            ps.setString(2, libro.getTitulo());
+            ps.setString(3, libro.getAutor());
+            ps.setString(4, isbn);
+            ps.setDouble(5, libro.getPrecio());
+            ps.setInt   (6, stock);
+            ps.setString(7, libro.getImagen());
+            ps.setInt   (8, libro.getPaginas());
+            ps.setString(9, libro.getCategoria());
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("[LibroDAO] insertar: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // ------------------------------------------------------------------
+    // Descuentos (mutación de precio sobre PostgreSQL)
+    // ------------------------------------------------------------------
+
+    /**
+     * Aplica un descuento porcentual al precio de todos los libros de
+     * una categoría. Devuelve el número de filas afectadas.
+     *
+     * @param categoria slug de la categoría (latinoamericana, manga, ...)
+     * @param porcentaje valor entre 1 y 90 (representa el % de descuento)
+     */
+    public int aplicarDescuentoCategoria(String categoria, double porcentaje) {
+        if (porcentaje <= 0 || porcentaje >= 100) return 0;
+        double factor = 1.0 - (porcentaje / 100.0);
+        String sql = "UPDATE tb_libro SET precio = ROUND(precio * ?::numeric, 2) " +
+                     "WHERE LOWER(categoria) = LOWER(?)";
+        try (Connection con = Conexion.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setDouble(1, factor);
+            ps.setString(2, categoria);
+            return ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("[LibroDAO] aplicarDescuentoCategoria: " + e.getMessage());
+            return 0;
+        }
+    }
+
+    /**
+     * Aplica un descuento porcentual a un libro específico (por id/slug).
+     */
+    public int aplicarDescuentoLibro(String libroId, double porcentaje) {
+        if (porcentaje <= 0 || porcentaje >= 100) return 0;
+        double factor = 1.0 - (porcentaje / 100.0);
+        String sql = "UPDATE tb_libro SET precio = ROUND(precio * ?::numeric, 2) WHERE id = ?";
+        try (Connection con = Conexion.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setDouble(1, factor);
+            ps.setString(2, libroId);
+            return ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("[LibroDAO] aplicarDescuentoLibro: " + e.getMessage());
+            return 0;
+        }
+    }
+
+    /** Elimina un libro por su id (slug). */
+    public boolean eliminar(String id) {
+        try (Connection con = Conexion.getConnection();
+             PreparedStatement ps = con.prepareStatement(SQL_DELETE)) {
+            ps.setString(1, id);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("[LibroDAO] eliminar: " + e.getMessage());
+            return false;
         }
     }
 

@@ -1,6 +1,8 @@
 package ec.edu.ups.controlador;
 
+import ec.edu.ups.dao.PedidoDAO;
 import ec.edu.ups.modelo.Carrito;
+import ec.edu.ups.modelo.Usuario;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -38,6 +40,11 @@ public class ProcesarPagoServlet extends HttpServlet {
     private static final Pattern SOLO_LETRAS_ESPACIOS =
             Pattern.compile("^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$");
 
+    /** Lista blanca de bancos ecuatorianos aceptados para transferencia. */
+    private static final java.util.Set<String> BANCOS_VALIDOS = java.util.Set.of(
+            "PICHINCHA", "GUAYAQUIL", "PRODUBANCO", "PACIFICO",
+            "BOLIVARIANO", "INTERNACIONAL", "AUSTRO");
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -50,56 +57,133 @@ public class ProcesarPagoServlet extends HttpServlet {
             return;
         }
 
-        String numero  = strip(request.getParameter("numero"));   // sin espacios
+        // Enrutado por método de pago.
+        String metodo = request.getParameter("metodo");
+        if (metodo == null) metodo = "tarjeta";
+
+        switch (metodo.toLowerCase()) {
+            case "transferencia": procesarTransferencia(request, response, session, carrito); return;
+            case "paypal":        procesarPayPal       (request, response, session, carrito); return;
+            case "tarjeta":
+            default:              procesarTarjeta      (request, response, session, carrito); return;
+        }
+    }
+
+    // ------------------------------------------------------------------
+    // 1) PAGO CON TARJETA (Luhn + marca + expiración + CVV)
+    // ------------------------------------------------------------------
+    private void procesarTarjeta(HttpServletRequest request, HttpServletResponse response,
+                                 HttpSession session, Carrito carrito) throws IOException {
+        String numero  = strip(request.getParameter("numero"));
         String titular = trim(request.getParameter("titular"));
-        String exp     = trim(request.getParameter("expira"));    // MM/AA
+        String exp     = trim(request.getParameter("expira"));
         String cvv     = strip(request.getParameter("cvv"));
 
-        // ---- 1. Detectar marca por BIN ----
+        // 1. Detectar marca por BIN
         Marca marca = detectarMarca(numero);
-        if (marca == null) {
-            redirigirConError(response, "marca_no_reconocida");
-            return;
-        }
-
-        // ---- 2. Longitud válida según marca ----
+        if (marca == null) { redirigirConError(response, "marca_no_reconocida"); return; }
+        // 2. Longitud válida según marca
         if (!marca.longitudesValidas.contains(numero.length())) {
-            redirigirConError(response, "longitud_invalida");
-            return;
+            redirigirConError(response, "longitud_invalida"); return;
         }
-
-        // ---- 3. Algoritmo de Luhn ----
-        if (!luhn(numero)) {
-            redirigirConError(response, "luhn");
-            return;
-        }
-
-        // ---- 4. Titular (mínimo nombre + apellido, sólo letras) ----
+        // 3. Algoritmo de Luhn
+        if (!luhn(numero)) { redirigirConError(response, "luhn"); return; }
+        // 4. Titular
         if (titular.length() < 5 || !titular.contains(" ") || !SOLO_LETRAS_ESPACIOS.matcher(titular).matches()) {
-            redirigirConError(response, "titular");
-            return;
+            redirigirConError(response, "titular"); return;
         }
-
-        // ---- 5. Fecha de expiración MM/AA, no vencida ----
-        if (!fechaValida(exp)) {
-            redirigirConError(response, "expira");
-            return;
-        }
-
-        // ---- 6. CVV — 3 ó 4 dígitos según marca ----
+        // 5. Fecha
+        if (!fechaValida(exp)) { redirigirConError(response, "expira"); return; }
+        // 6. CVV
         if (cvv.length() != marca.longitudCvv || !cvv.chars().allMatch(Character::isDigit)) {
-            redirigirConError(response, "cvv");
-            return;
+            redirigirConError(response, "cvv"); return;
         }
 
-        // -------- TODO OK -- "procesamos" el pago --------
         double montoCobrado = carrito.getTotal();
         String ultimos4 = numero.substring(numero.length() - 4);
+
+        Usuario u = (Usuario) session.getAttribute("usuarioActivo");
+        Integer usuarioId = (u != null) ? u.getId() : null;
+        int pedidoId = new PedidoDAO().crearDesdeCarrito(carrito, usuarioId, marca.nombre, ultimos4);
+        if (pedidoId > 0)
+            System.out.println("[ProcesarPagoServlet] Pedido #" + pedidoId + " (TARJETA) por $" + montoCobrado);
+
         carrito.vaciar();
 
         String url = "pago-exito.jsp"
-                + "?monto=" + montoCobrado
-                + "&marca=" + URLEncoder.encode(marca.nombre, StandardCharsets.UTF_8)
+                + "?metodo=tarjeta"
+                + "&monto="    + montoCobrado
+                + "&marca="    + URLEncoder.encode(marca.nombre, StandardCharsets.UTF_8)
+                + "&ultimos4=" + ultimos4;
+        response.sendRedirect(url);
+    }
+
+    // ------------------------------------------------------------------
+    // 2) TRANSFERENCIA BANCARIA (banco real EC + nro de comprobante)
+    // ------------------------------------------------------------------
+    private void procesarTransferencia(HttpServletRequest request, HttpServletResponse response,
+                                       HttpSession session, Carrito carrito) throws IOException {
+        String banco        = trim(request.getParameter("banco"));
+        String comprobante  = strip(request.getParameter("numComprobante"));
+        String titularTrans = trim(request.getParameter("titularTransfer"));
+
+        if (banco.isEmpty() || !BANCOS_VALIDOS.contains(banco)) {
+            redirigirConError(response, "banco_invalido"); return;
+        }
+        if (comprobante.length() < 6 || comprobante.length() > 20) {
+            redirigirConError(response, "comprobante_invalido"); return;
+        }
+        if (titularTrans.length() < 5 || !titularTrans.contains(" ")) {
+            redirigirConError(response, "titular"); return;
+        }
+
+        double montoCobrado = carrito.getTotal();
+        String marcaPago = "TRANSFERENCIA " + banco;
+
+        Usuario u = (Usuario) session.getAttribute("usuarioActivo");
+        Integer usuarioId = (u != null) ? u.getId() : null;
+        // Como "últimos 4" guardamos los últimos 4 del nro de comprobante.
+        String ultimos4 = comprobante.substring(Math.max(0, comprobante.length() - 4));
+        int pedidoId = new PedidoDAO().crearDesdeCarrito(carrito, usuarioId, marcaPago, ultimos4);
+        if (pedidoId > 0)
+            System.out.println("[ProcesarPagoServlet] Pedido #" + pedidoId + " (TRANSFER " + banco + ") por $" + montoCobrado);
+
+        carrito.vaciar();
+
+        String url = "pago-exito.jsp"
+                + "?metodo=transferencia"
+                + "&monto="    + montoCobrado
+                + "&marca="    + URLEncoder.encode(marcaPago, StandardCharsets.UTF_8)
+                + "&ultimos4=" + ultimos4;
+        response.sendRedirect(url);
+    }
+
+    // ------------------------------------------------------------------
+    // 3) PAYPAL (email válido simulado)
+    // ------------------------------------------------------------------
+    private void procesarPayPal(HttpServletRequest request, HttpServletResponse response,
+                                HttpSession session, Carrito carrito) throws IOException {
+        String email = trim(request.getParameter("emailPaypal")).toLowerCase();
+        if (!email.matches("^[a-z0-9._%+\\-]+@[a-z0-9.\\-]+\\.[a-z]{2,}$")) {
+            redirigirConError(response, "paypal_email_invalido"); return;
+        }
+
+        double montoCobrado = carrito.getTotal();
+        String dominio  = email.contains("@") ? email.substring(email.indexOf('@') + 1) : email;
+        String ultimos4 = dominio.length() >= 4 ? dominio.substring(0, 4).toUpperCase() : "PYPL";
+
+        Usuario u = (Usuario) session.getAttribute("usuarioActivo");
+        Integer usuarioId = (u != null) ? u.getId() : null;
+        int pedidoId = new PedidoDAO().crearDesdeCarrito(carrito, usuarioId, "PAYPAL", ultimos4);
+        if (pedidoId > 0)
+            System.out.println("[ProcesarPagoServlet] Pedido #" + pedidoId + " (PAYPAL " + email + ") por $" + montoCobrado);
+
+        carrito.vaciar();
+
+        String url = "pago-exito.jsp"
+                + "?metodo=paypal"
+                + "&monto="    + montoCobrado
+                + "&marca="    + URLEncoder.encode("PAYPAL", StandardCharsets.UTF_8)
                 + "&ultimos4=" + ultimos4;
         response.sendRedirect(url);
     }

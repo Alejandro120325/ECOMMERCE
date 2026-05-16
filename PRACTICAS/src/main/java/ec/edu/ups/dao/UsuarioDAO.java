@@ -4,7 +4,10 @@ import ec.edu.ups.modelo.Usuario;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UsuarioDAO {
 
@@ -36,6 +39,93 @@ public class UsuarioDAO {
         }
 
         return registrado;
+    }
+
+    // ------------------------------------------------------------------
+    // Gestión administrativa (admin dashboard)
+    // ------------------------------------------------------------------
+
+    /**
+     * Lista todas las cuentas registradas. Implementación defensiva:
+     * intenta primero con la columna {@code activo} (esquema actual);
+     * si la columna no existe en la base (instalaciones antiguas), cae
+     * a una segunda consulta más simple para no perder el listado.
+     */
+    public List<Usuario> listarTodos() {
+        final String sqlConActivo =
+            "SELECT id, nombre, apellido, cedula, correo, rol, activo " +
+            "FROM tb_usuario ORDER BY rol, nombre";
+        final String sqlSinActivo =
+            "SELECT id, nombre, apellido, cedula, correo, rol " +
+            "FROM tb_usuario ORDER BY rol, nombre";
+
+        try (Connection con = Conexion.getConnection()) {
+            if (con == null) {
+                System.err.println("[UsuarioDAO] sin conexión a PostgreSQL — devolviendo lista vacía.");
+                return new ArrayList<>();
+            }
+            try {
+                return ejecutarListado(con, sqlConActivo, true);
+            } catch (SQLException ex1) {
+                System.err.println("[UsuarioDAO] reintentando sin columna 'activo': " + ex1.getMessage());
+                try {
+                    return ejecutarListado(con, sqlSinActivo, false);
+                } catch (SQLException ex2) {
+                    System.err.println("[UsuarioDAO] listarTodos fallback falló: " + ex2.getMessage());
+                    return new ArrayList<>();
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("[UsuarioDAO] listarTodos error de conexión: " + e.getMessage());
+            return new ArrayList<>();
+        }
+    }
+
+    private List<Usuario> ejecutarListado(Connection con, String sql, boolean leerActivo)
+            throws SQLException {
+        List<Usuario> out = new ArrayList<>();
+        try (PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Usuario u = new Usuario();
+                u.setId(rs.getInt("id"));
+                u.setNombre(rs.getString("nombre"));
+                u.setApellido(rs.getString("apellido"));
+                u.setCedula(rs.getString("cedula"));
+                u.setCorreo(rs.getString("correo"));
+                u.setRol(rs.getString("rol"));
+                u.setActivo(leerActivo ? rs.getBoolean("activo") : true);
+                out.add(u);
+            }
+        }
+        return out;
+    }
+
+    /** Suspende ({@code activo=false}) o reactiva ({@code activo=true}) una cuenta. */
+    public boolean cambiarEstado(int id, boolean activo) {
+        String sql = "UPDATE tb_usuario SET activo = ? WHERE id = ?";
+        try (Connection con = Conexion.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setBoolean(1, activo);
+            ps.setInt(2, id);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("[UsuarioDAO] cambiarEstado: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /** Elimina por completo una cuenta. Falla limpiamente si hay FK rota. */
+    public boolean eliminar(int id) {
+        String sql = "DELETE FROM tb_usuario WHERE id = ?";
+        try (Connection con = Conexion.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("[UsuarioDAO] eliminar: " + e.getMessage());
+            return false;
+        }
     }
 
     public Usuario validarLogin(String correo, String clave) {

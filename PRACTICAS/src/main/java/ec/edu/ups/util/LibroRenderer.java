@@ -40,10 +40,22 @@ public final class LibroRenderer {
         sb.append("<div class=\"portada-contenedor\">");
         sb.append("<div class=\"libro-3d\" style=\"--book-d:").append(grosor).append("px;\">");
 
-        // 1. Portada (front)
+        // 1. Portada (front) — Fallback nativo HTML SIN JavaScript.
+        //    Usamos <object data="..."> en lugar de <img>: si la URL falla,
+        //    el contenido interno del <object> (el <span> de fallback) se
+        //    renderiza automáticamente sin mostrar el icono nativo de
+        //    "imagen rota" del navegador. Es la técnica más limpia y
+        //    sin JS para portadas de e-commerce.
         sb.append("<div class=\"face front\">")
-          .append("<img src=\"").append(escape(l.getImagen()))
-          .append("\" alt=\"").append(escape(l.getTitulo())).append("\">")
+          .append("<object data=\"").append(escape(l.getImagen()))
+          .append("\" type=\"image/jpeg\" class=\"cover-obj\" aria-label=\"")
+          .append(escape(l.getTitulo())).append("\">")
+          //   ↓ fallback que SOLO se renderiza si <object> no puede cargar la URL
+          .append("<span class=\"cover-fallback\">").append(escape(l.getTitulo())).append("</span>")
+          .append("</object>")
+          //   ↓ fallback PERMANENTE de fondo (se ve detrás si por alguna razón
+          //     el navegador no soportara <object> con type image/jpeg)
+          .append("<span class=\"cover-fallback cover-fallback-bg\">").append(escape(l.getTitulo())).append("</span>")
           .append("</div>");
 
         // 2. Contraportada (back)

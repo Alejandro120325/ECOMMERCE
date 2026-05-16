@@ -86,7 +86,7 @@ public final class CatalogoLibros {
         add("la-republica", "La República", "Platón", 14.80,
                 "https://covers.openlibrary.org/b/isbn/9788420674063-L.jpg", 528, "historia");
         add("zaratustra", "Así habló Zaratustra", "Friedrich Nietzsche", 16.40,
-                "https://covers.openlibrary.org/b/isbn/9788420651613-L.jpg", 432, "historia");
+                "https://covers.openlibrary.org/b/isbn/9780140441185-L.jpg?default=false", 432, "historia");
         add("meditaciones", "Meditaciones", "Marco Aurelio", 12.00,
                 "https://covers.openlibrary.org/b/isbn/9788420674049-L.jpg", 256, "historia");
 
@@ -124,13 +124,13 @@ public final class CatalogoLibros {
         add("one-piece-1",      "One Piece — Tomo 1",                "Eiichiro Oda",        9.90,
                 "https://covers.openlibrary.org/b/isbn/9784088725093-L.jpg", 216, "manga");
         add("naruto-1",         "Naruto — Tomo 1",                   "Masashi Kishimoto",   8.90,
-                "https://covers.openlibrary.org/b/isbn/9784088725369-L.jpg", 200, "manga");
+                "https://covers.openlibrary.org/b/isbn/9781591163589-L.jpg?default=false", 200, "manga");
         add("berserk-1",        "Berserk — Volumen 1",               "Kentaro Miura",      12.50,
                 "https://covers.openlibrary.org/b/isbn/9781593070205-L.jpg", 232, "manga");
         add("hajime-ippo-1",    "Hajime no Ippo — Tomo 1",           "George Morikawa",     9.50,
-                "https://covers.openlibrary.org/b/isbn/9784063340303-L.jpg", 200, "manga");
+                "https://covers.openlibrary.org/b/isbn/9781632361424-L.jpg?default=false", 200, "manga");
         add("dragon-ball-1",    "Dragon Ball — Tomo 1",              "Akira Toriyama",      8.90,
-                "https://covers.openlibrary.org/b/isbn/9784088722405-L.jpg", 192, "manga");
+                "https://covers.openlibrary.org/b/isbn/9781569319208-L.jpg?default=false", 192, "manga");
         add("vagabond-1",       "Vagabond — Volumen 1",              "Takehiko Inoue",     11.50,
                 "https://covers.openlibrary.org/b/isbn/9781421520544-L.jpg", 200, "manga");
         add("death-note-1",     "Death Note — Volumen 1",            "Tsugumi Ohba & Takeshi Obata", 10.20,

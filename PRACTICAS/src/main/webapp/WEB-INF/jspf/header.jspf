@@ -1,4 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
+<%
+    // Tema actual de la sesión (default: dark). Variable local al
+    // header — el body lee el mismo dato via EL en cada JSP host.
+    String tema = (String) session.getAttribute("tema");
+    if (tema == null) tema = "dark";
+%>
 <%--
     header.jspf
     Fragmento reutilizable del encabezado de FOLIO.
@@ -56,9 +62,13 @@
                     </a>
                     <ul class="dropdown-menu">
                         <% if ("ADMIN".equalsIgnoreCase(usrActivo.getRol())) { %>
+                        <%-- ADMIN hereda los privilegios del EMPLEADO --%>
                         <li><a href="admin.jsp"><i class="fas fa-crown"></i> Dashboard Admin</a></li>
+                        <li><a href="empleado.jsp"><i class="fas fa-boxes"></i> Inventario (CRUD)</a></li>
                         <% } else if ("EMPLEADO".equalsIgnoreCase(usrActivo.getRol())) { %>
                         <li><a href="empleado.jsp"><i class="fas fa-boxes"></i> Inventario</a></li>
+                        <% } else { %>
+                        <li><a href="perfil.jsp"><i class="fas fa-receipt"></i> Mi perfil &amp; Pedidos</a></li>
                         <% } %>
                         <li><a href="LogoutServlet"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
                     </ul>
@@ -78,6 +88,23 @@
                         <span class="carrito-badge">0</span>
                         <% } %>
                     </a>
+                </li>
+
+                <%-- Conmutador de tema (CERO JS — form POST tradicional) --%>
+                <li>
+                    <form action="SetThemeServlet" method="post" class="form-tema">
+                        <input type="hidden" name="redirect" value="<%= urlActual %>">
+                        <input type="hidden" name="tema"     value="<%= "dark".equals(tema) ? "light" : "dark" %>">
+                        <button type="submit" class="btn-tema"
+                                aria-label="Cambiar a tema <%= "dark".equals(tema) ? "claro" : "oscuro" %>"
+                                title="Cambiar a tema <%= "dark".equals(tema) ? "claro" : "oscuro" %>">
+                            <% if ("dark".equals(tema)) { %>
+                                <i class="fas fa-sun"></i>
+                            <% } else { %>
+                                <i class="fas fa-moon"></i>
+                            <% } %>
+                        </button>
+                    </form>
                 </li>
             </ul>
         </nav>

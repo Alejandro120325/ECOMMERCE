@@ -21,12 +21,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro de cliente &middot; FOLIO</title>
-    <link rel="stylesheet" href="css/estilos.css?v=40">
+    <link rel="stylesheet" href="css/estilos.css?v=60">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
-<body>
+<body class="${empty sessionScope.tema ? 'dark' : sessionScope.tema}">
 
 <%@ include file="WEB-INF/jspf/header.jspf" %>
 
@@ -148,14 +148,31 @@
 
             <div class="form-grupo">
                 <label for="clave">Clave</label>
-                <input type="password" id="clave" name="clave"
-                       required minlength="8" pattern="(?=.*[A-Z])(?=.*[0-9]).{8,}">
+                <%-- Ojo CSS-only sobre el campo de contraseña --%>
+                <div class="campo-clave">
+                    <input type="checkbox" id="ver-clave-1" class="ojo-toggle" tabindex="-1" aria-hidden="true">
+                    <input type="text" id="clave" name="clave" class="input-password"
+                           required minlength="8" pattern="(?=.*[A-Z])(?=.*[0-9]).{8,}"
+                           autocomplete="new-password" spellcheck="false">
+                    <label for="ver-clave-1" class="ojo" aria-label="Mostrar u ocultar contraseña" title="Mostrar / ocultar contraseña">
+                        <i class="fas fa-eye       icono-mostrar"></i>
+                        <i class="fas fa-eye-slash icono-ocultar"></i>
+                    </label>
+                </div>
                 <small>Mínimo 8 caracteres, con al menos una mayúscula y un número.</small>
             </div>
 
             <div class="form-grupo">
                 <label for="claveConfirm">Confirmar clave</label>
-                <input type="password" id="claveConfirm" name="claveConfirm" required minlength="8">
+                <div class="campo-clave">
+                    <input type="checkbox" id="ver-clave-2" class="ojo-toggle" tabindex="-1" aria-hidden="true">
+                    <input type="text" id="claveConfirm" name="claveConfirm" class="input-password"
+                           required minlength="8" autocomplete="new-password" spellcheck="false">
+                    <label for="ver-clave-2" class="ojo" aria-label="Mostrar u ocultar contraseña" title="Mostrar / ocultar contraseña">
+                        <i class="fas fa-eye       icono-mostrar"></i>
+                        <i class="fas fa-eye-slash icono-ocultar"></i>
+                    </label>
+                </div>
             </div>
 
             <h3 class="form-seccion-titulo"><i class="fas fa-camera"></i> Foto de perfil</h3>

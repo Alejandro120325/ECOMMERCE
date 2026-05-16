@@ -17,12 +17,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar sesión &middot; FOLIO</title>
-    <link rel="stylesheet" href="css/estilos.css?v=40">
+    <link rel="stylesheet" href="css/estilos.css?v=60">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
-<body>
+<body class="${empty sessionScope.tema ? 'dark' : sessionScope.tema}">
 
 <%@ include file="WEB-INF/jspf/header.jspf" %>
 
@@ -48,9 +48,18 @@
 
             <div class="form-grupo">
                 <label for="clave"><i class="fas fa-lock"></i> Clave</label>
-                <input type="password" id="clave" name="clave" placeholder="Tu contraseña"
-                       required minlength="6" autocomplete="current-password">
-                <small>Mínimo 6 caracteres.</small>
+                <%-- Campo de contraseña con ojo CSS-only (Checkbox Hack) --%>
+                <div class="campo-clave">
+                    <input type="checkbox" id="ver-clave-login" class="ojo-toggle" tabindex="-1" aria-hidden="true">
+                    <input type="text" id="clave" name="clave" class="input-password"
+                           placeholder="Tu contraseña" required minlength="6"
+                           autocomplete="current-password" spellcheck="false">
+                    <label for="ver-clave-login" class="ojo" aria-label="Mostrar u ocultar contraseña" title="Mostrar / ocultar contraseña">
+                        <i class="fas fa-eye       icono-mostrar"></i>
+                        <i class="fas fa-eye-slash icono-ocultar"></i>
+                    </label>
+                </div>
+                <small>Mínimo 6 caracteres. Haz clic en el ojo para revelar / ocultar.</small>
             </div>
 
             <div class="form-grupo">

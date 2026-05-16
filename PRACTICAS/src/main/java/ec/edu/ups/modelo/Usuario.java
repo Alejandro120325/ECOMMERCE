@@ -15,7 +15,8 @@ public class Usuario {
     private String correo;
     private String clave;
     private String fotoPerfil;
-    private String rol; // <-- NUEVO ATRIBUTO PARA ADMIN/EMPLEADO
+    private String rol;          // ADMIN / EMPLEADO / CLIENTE
+    private boolean activo = true; // false => cuenta suspendida
 
     public Usuario() {}
 
@@ -54,6 +55,7 @@ public class Usuario {
     public String getClave() { return clave; }
     public String getFotoPerfil() { return fotoPerfil; }
     public String getRol() { return rol; }
+    public boolean isActivo() { return activo; }
 
     // --- SETTERS ---
     public void setId(int id) { this.id = id; }
@@ -71,4 +73,5 @@ public class Usuario {
     public void setClave(String clave) { this.clave = clave; }
     public void setFotoPerfil(String fotoPerfil) { this.fotoPerfil = fotoPerfil; }
     public void setRol(String rol) { this.rol = rol; }
+    public void setActivo(boolean activo) { this.activo = activo; }
 }

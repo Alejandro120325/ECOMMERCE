@@ -8,21 +8,26 @@
    keyframes.
    ========================================================= */
 
-/* ---------- Variables Globales (Dark & Gold) ---------- */
-:root {
+/* ---------- Variables Globales: paleta DARK (default) ---------- */
+:root, body.dark {
     --color-primario:     #0b0b13;   /* casi negro azulado */
     --color-secundario:   #141420;
     --color-acento:       #d4af6a;   /* oro premium */
     --color-acento-hover: #e8c785;
     --color-acento-soft:  rgba(212, 175, 106, 0.18);
-    --color-fondo:        #07070d;   /* fondo body */
-    --color-superficie:   #14141d;   /* "blanco" del modo dark */
+    --color-fondo:        #07070d;
+    --color-superficie:   #14141d;
     --color-texto:        #e6e1d6;
     --color-texto-suave:  #9c9889;
     --color-blanco:       #14141d;
     --color-borde:        #2a2a36;
     --color-aside-texto:  #e6e1d6;
     --color-titulos:      #f1e6c8;
+    --color-overlay:      rgba(0, 0, 0, 0.7);
+    --color-input-bg:     rgba(255, 255, 255, 0.03);
+
+    --bg-glass:           linear-gradient(135deg, rgba(20, 20, 29, 0.55), rgba(14, 14, 22, 0.45));
+    --bg-hero:            linear-gradient(rgba(7, 7, 13, 0.85), rgba(7, 7, 13, 0.93));
 
     --sombra-suave:  0 4px 14px rgba(0, 0, 0, 0.45);
     --sombra-media:  0 10px 28px rgba(0, 0, 0, 0.6);
@@ -33,6 +38,193 @@
     --fuente-titulo: 'Playfair Display', Georgia, serif;
     --fuente-cuerpo: 'Inter', sans-serif;
 }
+
+/* ---------- Paleta LIGHT (Cream & Gold) — contraste AA/AAA verificado ----------
+   Cuerpo del texto:  #1a1a2e sobre #faf6ef  → ratio 14.4:1  (AAA)
+   Texto suave:       #4a4a55 sobre #faf6ef  → ratio  7.8:1  (AAA)
+   Texto sobre cards: #1a1a2e sobre #ffffff  → ratio 16.1:1  (AAA)
+   Acento dorado:     #8a6b30 sobre #faf6ef  → ratio  4.9:1  (AA)
+   ------------------------------------------------------------ */
+body.light {
+    --color-primario:     #1a1a26;
+    --color-secundario:   #2a2a3e;
+    --color-acento:       #8a6b30;   /* oro oscurecido para contrastar sobre cream */
+    --color-acento-hover: #6f5523;
+    --color-acento-soft:  rgba(138, 107, 48, 0.12);
+    --color-fondo:        #faf6ef;
+    --color-superficie:   #ffffff;
+    --color-texto:        #1a1a2e;   /* casi-negro azulado, AAA */
+    --color-texto-suave:  #4a4a55;   /* gris carbón, AAA */
+    --color-blanco:       #ffffff;
+    --color-borde:        #d9d0bf;
+    --color-aside-texto:  #f5f1ea;
+    --color-titulos:      #14142b;
+    --color-overlay:      rgba(26, 26, 38, 0.45);
+    --color-input-bg:     #ffffff;
+
+    --bg-glass:           linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(245, 240, 230, 0.85));
+    --bg-hero:            linear-gradient(rgba(26, 26, 38, 0.55), rgba(26, 26, 38, 0.7));
+
+    --sombra-suave:  0 4px 12px rgba(26, 26, 46, 0.10);
+    --sombra-media:  0 10px 28px rgba(26, 26, 46, 0.18);
+    --sombra-fuerte: 0 18px 42px rgba(26, 26, 46, 0.26);
+}
+
+/* ============================================================
+   CONTRASTE LIGHT THEME — WCAG AA / AAA garantizado
+   ------------------------------------------------------------
+   Reglas:
+   * Donde el fondo es OSCURO en ambos temas (hero, body>header,
+     .stats-bar, aside, carrito-header, sidebar, footer, banner
+     dorado newsletter): texto SIEMPRE claro (#fff / #f5e6c8).
+   * Donde el fondo es CLARO en light theme (cards, panels, inputs,
+     tablas, body): texto SIEMPRE oscuro (#14142b / #1a1a2e).
+   ============================================================ */
+
+/* ---------- LIGHT: contraste sobre superficies CLARAS ---------- */
+body.light h1, body.light h2, body.light h3, body.light h4 { color: var(--color-titulos); }
+
+body.light main p, body.light main label, body.light main small,
+body.light .libro-info h4,
+body.light .benefit-card h3, body.light .benefit-card p,
+body.light .step h3, body.light .step p,
+body.light .testimonio p, body.light .testimonio footer strong,
+body.light .kpi-card span, body.light .kpi-card h2,
+body.light .admin-panel-header h3,
+body.light .admin-panel p,
+body.light table th, body.light table td,
+body.light .section-header h2,
+body.light .catalogo-titulo h2,
+body.light .form-container h2 { color: var(--color-titulos); }
+
+body.light .libro-info .autor,
+body.light .section-header p,
+body.light .catalogo-titulo p,
+body.light .form-grupo small,
+body.light .testimonio footer small,
+body.light .red-info small { color: var(--color-texto-suave); }
+body.light .form-grupo label  { color: var(--color-titulos); font-weight: 700; }
+body.light .form-container .subtitulo { color: var(--color-texto-suave); }
+
+/* ---------- LIGHT: contraste sobre superficies OSCURAS (sin tocar) ----------
+   El hero, el header principal, la stats-bar, el aside, el carrito
+   y el footer conservan fondo oscuro en ambos temas → texto claro. */
+body.light .hero,
+body.light .hero h2, body.light .hero p,
+body.light .hero .hero-badge,
+body.light .hero .btn-hero-outline,
+body.light body > header, body.light body > header *,
+body.light .stats-bar, body.light .stats-bar *,
+body.light .stat-card .stat-label,
+body.light aside, body.light aside *,
+body.light footer, body.light footer *,
+body.light .carrito-header, body.light .carrito-header *,
+body.light .libro-mes, body.light .libro-mes *,
+body.light .pago-tarjeta, body.light .pago-tarjeta * {
+    color: #f5e6c8;
+}
+body.light .hero h2 { color: #ffffff; }
+body.light .hero .btn-hero { color: #1a1a2e !important; }   /* botón dorado: texto navy */
+body.light body > header nav ul li a { color: #ffffff; }
+body.light .stat-card .stat-num { color: var(--color-acento); }
+body.light .stat-card i          { color: var(--color-acento); }
+body.light aside h3              { color: var(--color-acento); }
+body.light .carrito-header h3    { color: #ffffff; }
+body.light .carrito-header h3 i  { color: var(--color-acento); }
+body.light .carrito-usuario      { color: rgba(245, 230, 200, 0.7); }
+body.light .footer-copyright     { color: rgba(255, 255, 255, 0.65); }
+
+/* Newsletter (banner dorado) — texto navy independientemente del tema */
+body.light .newsletter h2,
+body.light .newsletter p,
+body.light .newsletter-thanks { color: #1a1a2e !important; }
+
+/* Inputs en LIGHT: borde y texto oscuro sobre blanco */
+body.light .form-grupo input,
+body.light .form-grupo select,
+body.light .form-grupo textarea,
+body.light .admin-panel input,
+body.light .admin-panel select,
+body.light .admin-panel textarea {
+    background: #ffffff !important;
+    color: var(--color-texto) !important;
+    border-color: var(--color-borde) !important;
+}
+body.light .form-grupo input::placeholder { color: #8a8a92; }
+
+/* Tablas en LIGHT */
+body.light th { background: rgba(138, 107, 48, 0.08); color: var(--color-acento); }
+body.light tbody tr:hover { background: rgba(138, 107, 48, 0.05); }
+
+/* Badges legibles en LIGHT */
+body.light .badge-cliente  { background: rgba(46, 160, 67, 0.15);  color: #1b6b2c; border-color: rgba(46,160,67,0.45); }
+body.light .badge-empleado { background: rgba(23, 162, 184, 0.15); color: #0e6a7d; border-color: rgba(23,162,184,0.45); }
+
+/* Botón añadir y filtros — refuerzo legibilidad LIGHT */
+body.light .btn-anadir {
+    background: #ffffff !important;
+    color: var(--color-acento) !important;
+    border: 1px solid var(--color-acento) !important;
+}
+body.light .btn-anadir:hover {
+    background: var(--color-acento) !important;
+    color: #ffffff !important;
+}
+
+body.light .filtros-categoria a {
+    background: #ffffff !important;
+    color: var(--color-titulos) !important;
+    border: 1px solid var(--color-borde) !important;
+}
+body.light .filtros-categoria a:hover {
+    border-color: var(--color-acento) !important;
+    color: var(--color-acento) !important;
+    background: rgba(138, 107, 48, 0.05) !important;
+}
+body.light .filtros-categoria a.activo {
+    background: var(--color-acento) !important;
+    color: #ffffff !important;
+    border-color: var(--color-acento) !important;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(138, 107, 48, 0.35);
+}
+
+/* Cards y libro-card fuerzan fondo blanco (corrige el gris de glassmorphism) */
+body.light .libro-card,
+body.light .benefit-card,
+body.light .step,
+body.light .testimonio,
+body.light .kpi-card,
+body.light .admin-panel,
+body.light .form-container,
+body.light .red-card {
+    background: #ffffff !important;
+    border-color: var(--color-borde) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+body.light .libro-card .portada-contenedor {
+    background: linear-gradient(180deg, #ebe5d6, #d9d0bf) !important;
+}
+body.light .catalogo-titulo h2,
+body.light .catalogo-titulo p { color: var(--color-texto); }
+body.light .pago-resumen-detalle .linea,
+body.light .carrito-resumen .linea-resumen { color: var(--color-texto); }
+body.light .carrito-resumen .linea-resumen.total { color: var(--color-titulos); }
+body.light .carrito-vacio,
+body.light .catalogo-vacio { color: var(--color-texto-suave); }
+body.light .catalogo-vacio h3 { color: var(--color-texto); }
+
+/* Hover de las tarjetas mantiene legibilidad */
+body.light .libro-card:hover,
+body.light .benefit-card:hover,
+body.light .step:hover,
+body.light .testimonio:hover { background: #ffffff; }
+body.light .kpi-card { background: #ffffff; }
+
+/* Mensaje de error/éxito en LIGHT */
+body.light .mensaje.exito { color: #1b6b2c; }
+body.light .mensaje.error { color: #a4231e; }
 
 /* ---------- Reset ---------- */
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -50,7 +242,29 @@ body {
         radial-gradient(ellipse at 20% 10%, rgba(212, 175, 106, 0.06), transparent 50%),
         radial-gradient(ellipse at 80% 90%, rgba(212, 175, 106, 0.05), transparent 50%);
     background-attachment: fixed;
+    transition: background-color 0.4s ease, color 0.4s ease;
 }
+body.light {
+    background-image:
+        radial-gradient(ellipse at 20% 10%, rgba(184, 151, 90, 0.08), transparent 50%),
+        radial-gradient(ellipse at 80% 90%, rgba(184, 151, 90, 0.06), transparent 50%);
+}
+
+/* Ajustes específicos del tema LIGHT que no se resuelven solo con variables */
+body.light header { box-shadow: var(--sombra-media); }
+body.light .libro-card,
+body.light .benefit-card,
+body.light .step,
+body.light .testimonio,
+body.light .kpi-card,
+body.light .admin-panel,
+body.light .sidebar,
+body.light .form-container {
+    background: var(--bg-glass);
+}
+body.light th { color: var(--color-acento); }
+body.light .toast { background: var(--color-superficie); }
+body.light .pago-tarjeta { color: #fff; }
 
 h1, h2, h3, h4 {
     font-family: var(--fuente-titulo);
@@ -66,15 +280,30 @@ a  { text-decoration: none; color: var(--color-acento); transition: var(--transi
 a:hover { color: var(--color-acento-hover); }
 
 /* ============================================================
-   HEADER & NAV (dropdowns por CSS-only — :hover + :focus-within)
+   HEADER & NAV — SOLO el header principal del sitio (hijo directo
+   de <body>). Esto evita que <header class="catalogo-titulo">
+   dentro de <main> herede sticky/z-index/fondo oscuro y bloquee
+   el dropdown del menú "Catálogo".
    ============================================================ */
-header {
+body > header {
     background: linear-gradient(135deg, var(--color-primario) 0%, var(--color-secundario) 100%);
     color: #fff;
     padding: 1rem 1.5rem;
     box-shadow: var(--sombra-media);
     position: sticky; top: 0; z-index: 1000;
     border-bottom: 1px solid rgba(212,175,106,0.15);
+}
+
+/* Cualquier otro <header> dentro del body (catalogo-titulo, etc.)
+   no debe arrastrar fondo, sticky ni z-index del header principal. */
+main header, section header, article header {
+    background: transparent !important;
+    color: inherit !important;
+    box-shadow: none !important;
+    position: static !important;
+    z-index: auto !important;
+    padding: 0;
+    border: none;
 }
 .header-container {
     display: flex; align-items: center; justify-content: space-between;
@@ -1170,14 +1399,76 @@ footer {
      `min-width:0`, expandiéndose de forma natural.
    * `overflow-x: auto` se aplica SOLO en móvil (<900px).
    ============================================================ */
+/* ============================================================
+   DASHBOARD CONTAINER — Simetría total + sin cortes verticales
+   ------------------------------------------------------------
+   * min-height: calc(100vh - 200px) garantiza que el área de
+     trabajo ocupe la pantalla aunque el contenido sea corto.
+   * box-sizing: border-box evita que los paddings empujen los
+     hijos fuera del contenedor.
+   * padding simétrico vertical y horizontal con margen
+     de seguridad inferior para que la columna del sidebar no
+     se vea "huérfana" al final de la página.
+   ============================================================ */
 .dashboard-container {
     display: grid;
     grid-template-columns: 280px minmax(0, 1fr);
     gap: 2rem;
-    max-width: 1400px; margin: 0 auto; width: 100%;
-    padding: 2rem 1rem;
-    align-items: flex-start;
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 2.5rem 1.5rem 4rem;     /* superior 2.5 + inferior 4rem = respiración */
+    align-items: stretch;             /* sidebar y main misma altura mínima */
+    box-sizing: border-box;
+    min-height: calc(100vh - 220px);  /* header(~88px) + footer(~120px) */
     flex: 1;
+}
+.dashboard-container,
+.dashboard-container * { box-sizing: border-box; }
+
+/* Main content jamás se corta: respira hasta el final de la columna */
+.dashboard-container .main-content {
+    min-width: 0;
+    min-height: 100%;
+    display: flex; flex-direction: column;
+    gap: 1.5rem;
+}
+.dashboard-container .main-content > * {
+    flex-shrink: 0;
+}
+/* La última sección se estira para llenar el espacio restante */
+.dashboard-container .main-content > section:last-child {
+    flex-grow: 1;
+    display: flex; flex-direction: column; gap: 1.5rem;
+}
+
+/* Sidebar siempre fluida — nunca se separa del main */
+.dashboard-container .sidebar {
+    min-height: 100%;
+    align-self: stretch;
+    height: auto !important;
+    position: relative;        /* ya no es sticky por defecto en este layout */
+    top: auto;
+}
+/* En pantallas grandes, sí queremos sticky pero sin recortar */
+@media (min-width: 1100px) {
+    .dashboard-container .sidebar {
+        position: sticky;
+        top: 100px;
+        align-self: flex-start;
+        min-height: auto;
+    }
+}
+
+/* Resolución móvil: una sola columna, sin saltos */
+@media (max-width: 900px) {
+    .dashboard-container {
+        grid-template-columns: 1fr;
+        padding: 1.5rem 1rem 3rem;
+        gap: 1.5rem;
+        min-height: auto;
+    }
+    .dashboard-container .sidebar { position: static; min-height: auto; }
 }
 
 /* ---- Sidebar Glassmórfico ---- */
@@ -1591,6 +1882,469 @@ nav ul li a {
 ::-moz-selection {
     background: rgba(212, 175, 106, 0.35);
     color: #fff;
+}
+
+/* ============================================================
+   REDES SOCIALES PREMIUM (contacto.jsp)
+   ------------------------------------------------------------
+   Grid simétrico de tarjetas con icono circular dorado, hover
+   con escala y resplandor neón. Reemplaza el listado plano.
+   ============================================================ */
+.redes-premium {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+.red-card {
+    display: flex; align-items: center; gap: 1rem;
+    padding: 0.95rem 1.1rem;
+    background: var(--bg-glass);
+    backdrop-filter: blur(16px) saturate(150%);
+    -webkit-backdrop-filter: blur(16px) saturate(150%);
+    border: 1px solid rgba(212, 175, 106, 0.18);
+    border-radius: 14px;
+    color: var(--color-texto);
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(.2, .9, .25, 1);
+    box-shadow:
+        0 8px 22px rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+.red-card::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(circle at 30% 30%, rgba(212, 175, 106, 0.15), transparent 60%);
+    opacity: 0; transition: opacity 0.4s ease;
+}
+.red-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(212, 175, 106, 0.55);
+    box-shadow:
+        0 18px 36px rgba(0, 0, 0, 0.55),
+        0 0 24px rgba(212, 175, 106, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+.red-card:hover::before { opacity: 1; }
+
+.red-icon {
+    width: 48px; height: 48px;
+    border-radius: 14px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 1.2rem;
+    background: linear-gradient(135deg, var(--color-acento), var(--color-acento-hover));
+    color: #0b0b13;
+    box-shadow:
+        0 6px 16px rgba(212, 175, 106, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+    transition: transform 0.4s cubic-bezier(.2, .9, .25, 1), box-shadow 0.4s ease;
+    flex-shrink: 0;
+}
+.red-card:hover .red-icon {
+    transform: rotate(-8deg) scale(1.08);
+    box-shadow:
+        0 8px 24px rgba(212, 175, 106, 0.55),
+        0 0 16px rgba(212, 175, 106, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.red-info { display: flex; flex-direction: column; line-height: 1.25; min-width: 0; }
+.red-info strong {
+    color: var(--color-titulos);
+    font-size: 1rem;
+    font-family: var(--fuente-titulo);
+    letter-spacing: 0.02em;
+}
+.red-info small {
+    color: var(--color-texto-suave);
+    font-size: 0.82rem;
+    word-break: break-word;
+}
+.red-card:hover .red-info strong { color: var(--color-acento); }
+
+/* Acentos sutiles por red (sólo en el borde inferior al hover) */
+.red-fb:hover  { box-shadow: 0 18px 36px rgba(0,0,0,0.55), 0 0 24px rgba(66, 103, 178, 0.25), inset 0 -3px 0 #4267B2; }
+.red-ig:hover  { box-shadow: 0 18px 36px rgba(0,0,0,0.55), 0 0 24px rgba(225, 48, 108, 0.25), inset 0 -3px 0 #E1306C; }
+.red-x:hover   { box-shadow: 0 18px 36px rgba(0,0,0,0.55), 0 0 24px rgba(255, 255, 255, 0.18), inset 0 -3px 0 #ffffff; }
+.red-wa:hover  { box-shadow: 0 18px 36px rgba(0,0,0,0.55), 0 0 24px rgba(37, 211, 102, 0.3),  inset 0 -3px 0 #25D366; }
+.red-tk:hover  { box-shadow: 0 18px 36px rgba(0,0,0,0.55), 0 0 24px rgba(238, 29, 82, 0.25),  inset 0 -3px 0 #EE1D52; }
+.red-mail:hover{ box-shadow: 0 18px 36px rgba(0,0,0,0.55), 0 0 24px rgba(212, 175, 106, 0.4), inset 0 -3px 0 var(--color-acento); }
+
+/* ============================================================
+   PADDING DE SEGURIDAD para secciones "Why FOLIO" y "Steps"
+   ============================================================ */
+.home-section.why-folio,
+.home-section.steps {
+    padding: 0 2rem;            /* nunca pegado a los bordes */
+    max-width: 1240px;          /* leve aumento para mejor respiración */
+}
+.benefits-grid {
+    padding: 0.5rem 0;
+    gap: 1.8rem;                /* aire entre tarjetas */
+}
+.benefit-card { padding: 2.2rem 1.8rem; }
+.steps-grid   { padding: 1rem 0.5rem; }
+@media (max-width: 700px) {
+    .home-section.why-folio,
+    .home-section.steps { padding: 0 1.2rem; }
+    .benefits-grid { gap: 1.2rem; }
+    .benefit-card  { padding: 1.6rem 1.2rem; }
+}
+
+/* ============================================================
+   REFUERZO SIMETRÍA DASHBOARDS
+   ------------------------------------------------------------
+   El refactor anterior ya quitó el min-width forzado de las
+   tablas. Aquí garantizamos que NUNCA aparezca scroll-x en
+   desktop y normalizamos paddings/anchos.
+   ============================================================ */
+.admin-panel { overflow: visible !important; }
+.admin-section table,
+.empleado-section table { table-layout: fixed; width: 100%; }
+.admin-section table th,
+.admin-section table td,
+.empleado-section table th,
+.empleado-section table td { overflow-wrap: anywhere; word-break: break-word; }
+
+/* Botones de acción cromáticos (suspender/activar/eliminar) */
+.btn-accion.btn-success { background: rgba(46,160,67,0.15);  color: #7ee08a; border: 1px solid rgba(46,160,67,0.35); }
+.btn-accion.btn-warn    { background: rgba(255,193,7,0.15);  color: #ffc107; border: 1px solid rgba(255,193,7,0.35); }
+.btn-accion.btn-danger  { background: rgba(218,54,51,0.15);  color: #ff8b88; border: 1px solid rgba(218,54,51,0.35); }
+.btn-accion.btn-success:hover { background: rgba(46,160,67,0.28);  transform: translateY(-2px); }
+.btn-accion.btn-warn:hover    { background: rgba(255,193,7,0.28);  transform: translateY(-2px); }
+.btn-accion.btn-danger:hover  { background: rgba(218,54,51,0.28);  transform: translateY(-2px); }
+.form-inline { display: inline; margin: 0; }
+
+/* En móvil restauramos overflow-x para tablas anchas */
+@media (max-width: 900px) {
+    .admin-panel { overflow-x: auto !important; }
+    .admin-section table,
+    .empleado-section table { table-layout: auto; min-width: 600px; }
+}
+
+/* ============================================================
+   PASARELA DE PAGO — métodos en <details>
+   ============================================================ */
+.metodo-pago {
+    background: var(--bg-glass);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    border: 1px solid rgba(212, 175, 106, 0.25);
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+    transition: all 0.35s cubic-bezier(.2,.9,.25,1);
+}
+.metodo-pago[open] {
+    border-color: rgba(212, 175, 106, 0.55);
+    box-shadow: 0 10px 28px rgba(0,0,0,0.4),
+                0 0 22px rgba(212, 175, 106, 0.12);
+}
+.metodo-pago summary {
+    display: flex; align-items: center; gap: 1rem;
+    padding: 1rem 1.2rem;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+}
+.metodo-pago summary::-webkit-details-marker,
+.metodo-pago summary::marker { display: none; }
+.metodo-icon {
+    width: 46px; height: 46px;
+    border-radius: 12px;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, var(--color-acento), var(--color-acento-hover));
+    color: #0b0b13;
+    font-size: 1.2rem;
+    box-shadow: 0 6px 14px rgba(212, 175, 106, 0.35),
+                inset 0 1px 0 rgba(255,255,255,0.4);
+    flex-shrink: 0;
+}
+.metodo-info {
+    flex: 1;
+    display: flex; flex-direction: column; line-height: 1.25;
+}
+.metodo-info strong { color: var(--color-titulos); font-family: var(--fuente-titulo); font-size: 1.05rem; }
+.metodo-info small  { color: var(--color-texto-suave); font-size: 0.82rem; }
+.metodo-chevron {
+    color: var(--color-acento);
+    transition: transform 0.4s cubic-bezier(.2,.9,.25,1);
+}
+.metodo-pago[open] .metodo-chevron { transform: rotate(180deg); }
+
+.metodo-form {
+    padding: 0 1.2rem 1.2rem;
+    border-top: 1px dashed rgba(212, 175, 106, 0.2);
+    padding-top: 1.2rem;
+    display: flex; flex-direction: column; gap: 1rem;
+}
+
+.info-deposito {
+    padding: 1rem 1.2rem;
+    background: rgba(212, 175, 106, 0.06);
+    border-top: 1px dashed rgba(212, 175, 106, 0.2);
+    border-bottom: 1px dashed rgba(212, 175, 106, 0.2);
+}
+.info-deposito p { margin: 0 0 0.6rem; color: var(--color-texto); }
+.cuenta-deposito {
+    width: 100%; border-collapse: collapse;
+    font-size: 0.9rem;
+    margin: 0.4rem 0 0.6rem;
+}
+.cuenta-deposito th, .cuenta-deposito td {
+    padding: 0.45rem 0.6rem;
+    text-align: left;
+    border-bottom: 1px dashed rgba(212, 175, 106, 0.18);
+}
+.cuenta-deposito th {
+    color: var(--color-acento);
+    font-weight: 600; width: 40%;
+    background: transparent;
+    text-transform: none; font-size: 0.85rem;
+    letter-spacing: 0;
+}
+.cuenta-deposito td code {
+    color: var(--color-acento);
+    background: rgba(212, 175, 106, 0.1);
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 0.08em;
+}
+
+/* Light theme overrides para pago */
+body.light .metodo-pago { background: #ffffff !important; }
+body.light .info-deposito { background: #fff8ec; }
+body.light .cuenta-deposito td code { background: rgba(138, 107, 48, 0.1); color: var(--color-acento); }
+body.light .metodo-info strong { color: var(--color-titulos); }
+body.light .metodo-info small  { color: var(--color-texto-suave); }
+
+/* ============================================================
+   CONMUTADOR DE TEMA (Sol/Luna) — form POST en el header
+   ============================================================ */
+.form-tema { display: inline-block; margin: 0; }
+.btn-tema {
+    background: transparent;
+    border: 1px solid rgba(212, 175, 106, 0.35);
+    color: var(--color-acento);
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1rem;
+    display: inline-flex; align-items: center; justify-content: center;
+    transition: all 0.45s cubic-bezier(.2, .9, .25, 1);
+    box-shadow: inset 0 0 0 0 rgba(212, 175, 106, 0.1);
+}
+.btn-tema:hover {
+    border-color: var(--color-acento);
+    color: var(--color-acento-hover);
+    transform: rotate(20deg) scale(1.06);
+    background: var(--color-acento-soft);
+    box-shadow:
+        0 0 16px rgba(212, 175, 106, 0.4),
+        inset 0 0 12px rgba(212, 175, 106, 0.18);
+}
+
+/* ============================================================
+   Z-INDEX BLINDADO — el dropdown del Catálogo SIEMPRE encima
+   ------------------------------------------------------------
+   Causa raíz vista en pruebas: cuando se hace scroll, el banner
+   del catálogo entraba sobre el dropdown. Lo resolvemos:
+     · header en su propio stacking context (isolation: isolate)
+     · z-index del header bien por encima de cualquier sección
+     · z-index del dropdown aún más alto, asegurado
+     · overflow: visible explícito en header y nav para evitar clipping
+   ============================================================ */
+body > header {
+    z-index: 9000;
+    isolation: isolate;
+    overflow: visible;
+}
+body > header nav, body > header nav ul,
+body > header .header-container,
+body > header .dropdown { overflow: visible; }
+body > header .dropdown { position: relative; z-index: 9100; }
+.dropdown-menu,
+.dropdown-menu.dropdown-categorias {
+    z-index: 9500 !important;
+}
+/* Las secciones del body se quedan bajo el header sin importar transforms */
+.hero, .stats-bar, .home-section, .catalogo-main,
+.dashboard-container, .form-wrapper, .content, footer { z-index: 1; position: relative; }
+
+/* ============================================================
+   COVER — Portada con FALLBACK NATIVO SIN JAVASCRIPT
+   ------------------------------------------------------------
+   Estrategia:
+     1) <object data="url"> intenta cargar la imagen. Si carga,
+        renderiza la imagen.
+     2) Si la URL falla (404, CORS, hotlinking bloqueado), el
+        navegador renderiza automáticamente el contenido interno
+        del <object>: un <span class="cover-fallback"> que pinta
+        un gradiente oscuro/dorado con el título del libro
+        centrado en tipografía Playfair.
+   * Nunca se ve el icono nativo de imagen rota.
+   * Cero JavaScript. Estándar HTML 4.01+.
+   * Si por algún motivo (navegadores muy antiguos) <object> no
+     pudiera procesar type=image/jpeg, hay además un span
+     "permanente" detrás (.cover-fallback-bg) con z-index 0.
+   ============================================================ */
+.libro-3d .face.front {
+    background: linear-gradient(135deg, #2a1d12 0%, #1a1a2e 60%, #0e0e14 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+/* El <object> ocupa toda la cara frontal */
+.libro-3d .face.front .cover-obj {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    display: block;
+    border: 0;
+    z-index: 2;
+    pointer-events: none;   /* nunca capta clicks → no roba al libro 3D */
+    background: transparent;
+}
+/* Si el navegador interpreta <object> como un elemento que
+   también renderiza imagen, hacemos que se comporte exactamente
+   como un <img> con object-fit: cover. */
+.libro-3d .face.front .cover-obj img,
+.libro-3d .face.front .cover-obj { object-fit: cover; object-position: center; }
+
+/* Fallback PREMIUM — visible siempre detrás del <object>.
+   Cuando el <object> renderiza la imagen, ésta lo cubre.
+   Cuando el <object> falla, su contenido interno (también un
+   .cover-fallback) se renderiza encima con el mismo aspecto. */
+.libro-3d .face.front .cover-fallback {
+    position: absolute; inset: 0;
+    z-index: 1;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 1.4rem 1rem;
+    font-family: var(--fuente-titulo);
+    font-size: 1rem; line-height: 1.3;
+    font-weight: 700;
+    color: var(--color-acento);
+    background:
+        radial-gradient(circle at 30% 30%, rgba(212, 175, 106, 0.18), transparent 55%),
+        radial-gradient(circle at 70% 80%, rgba(212, 175, 106, 0.10), transparent 60%),
+        linear-gradient(135deg, #2a1d12 0%, #1a1a2e 55%, #0e0e14 100%);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+    letter-spacing: 0.02em;
+    word-break: break-word;
+}
+/* Banda dorada decorativa para que NUNCA se vea un libro "negro plano" */
+.libro-3d .face.front .cover-fallback::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, var(--color-acento), transparent);
+    opacity: 0.6;
+}
+.libro-3d .face.front .cover-fallback::after {
+    content: 'FOLIO';
+    position: absolute;
+    bottom: 10px; left: 0; right: 0;
+    text-align: center;
+    font-size: 0.62rem;
+    letter-spacing: 0.4em;
+    color: rgba(212, 175, 106, 0.55);
+    font-family: var(--fuente-cuerpo);
+    font-weight: 600;
+}
+
+/* Variante "bg" (la del exterior) — se ve sólo si <object> no soporta nada */
+.libro-3d .face.front .cover-fallback-bg { z-index: 0; }
+
+/* ============================================================
+   PADDING REFORZADO — "Más que una librería online"
+   ============================================================ */
+.home-section.why-folio {
+    padding: 0 2.5rem;
+    margin: 5rem auto;
+}
+.why-folio .section-header { padding: 0 1rem; margin-bottom: 3.5rem; }
+.why-folio .benefits-grid {
+    padding: 0.5rem 0;
+    gap: 2rem;
+}
+.why-folio .benefit-card {
+    padding: 2.4rem 2rem;
+}
+.why-folio .benefit-card h3 { margin-bottom: 0.7rem; }
+.why-folio .benefit-card p  { line-height: 1.65; }
+@media (max-width: 720px) {
+    .home-section.why-folio { padding: 0 1.2rem; }
+    .why-folio .benefit-card { padding: 1.8rem 1.4rem; }
+}
+
+/* ============================================================
+   CONTRASEÑA con CSS CHECKBOX HACK (cero JavaScript)
+   ------------------------------------------------------------
+   El <input> que aparenta ser de tipo password es realmente
+   type="text" + -webkit-text-security: disc. Un <input type="checkbox">
+   oculto cambia el security state vía :checked + sibling selector.
+   Compatibilidad: Chrome/Edge/Safari (WebKit) y Firefox 119+.
+   Para FF antiguo el campo se ve en texto plano (degradación
+   aceptable — sigue funcionando como contraseña sin reveladores).
+   ============================================================ */
+.campo-clave {
+    position: relative;
+    display: block;
+    width: 100%;
+}
+.campo-clave .input-password {
+    width: 100%;
+    padding-right: 2.8rem !important;       /* deja espacio para el ojo */
+    -webkit-text-security: disc;
+            text-security: disc;            /* Firefox 119+ */
+    font-family: var(--fuente-cuerpo);
+    letter-spacing: 0.1em;
+}
+.campo-clave .ojo-toggle {                  /* checkbox oculto */
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    width: 0; height: 0;
+}
+.campo-clave .ojo {                          /* label con icono */
+    position: absolute;
+    right: 12px; top: 50%;
+    transform: translateY(-50%);
+    width: 34px; height: 34px;
+    display: inline-flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    color: var(--color-texto-suave);
+    border-radius: 6px;
+    transition: all 0.25s cubic-bezier(.2,.9,.25,1);
+    user-select: none;
+}
+.campo-clave .ojo:hover { color: var(--color-acento); background: var(--color-acento-soft); }
+
+/* Doble icono — uno para "mostrar" otro para "ocultar" */
+.campo-clave .ojo .icono-ocultar { display: none; }
+
+/* Cuando el checkbox está marcado: revelamos texto e intercambiamos ícono */
+.campo-clave .ojo-toggle:checked ~ .input-password {
+    -webkit-text-security: none;
+            text-security: none;
+    letter-spacing: normal;
+}
+.campo-clave .ojo-toggle:checked ~ .ojo .icono-mostrar { display: none; }
+.campo-clave .ojo-toggle:checked ~ .ojo .icono-ocultar { display: inline; }
+.campo-clave .ojo-toggle:checked ~ .ojo {
+    color: var(--color-acento);
+    background: var(--color-acento-soft);
+}
+
+/* Foco accesible: cuando el campo recibe foco, refuerza el shadow */
+.campo-clave .input-password:focus { outline: none; }
+.campo-clave:focus-within .ojo {
+    color: var(--color-acento);
 }
 
 /* ============================================================

@@ -45,10 +45,12 @@ CREATE TABLE tb_usuario (
     foto_perfil      VARCHAR(200),
     rol              VARCHAR(20)  NOT NULL DEFAULT 'CLIENTE'
                                   CHECK (rol IN ('CLIENTE','EMPLEADO','ADMIN')),
+    activo           BOOLEAN      NOT NULL DEFAULT TRUE,   -- false = cuenta suspendida
     creado_en        TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 CREATE INDEX idx_tb_usuario_correo ON tb_usuario (correo);
 CREATE INDEX idx_tb_usuario_rol    ON tb_usuario (rol);
+CREATE INDEX idx_tb_usuario_activo ON tb_usuario (activo);
 
 -- =====================================================================
 -- 2. clientes  — Tabla auxiliar legada (ClienteDAO la usa para insertar)
@@ -191,7 +193,7 @@ INSERT INTO tb_libro
 -- =================== 5) HISTORIA Y FILOSOFÍA (10) ===================
 ('sapiens',                   'Sapiens: De animales a dioses',         'Yuval Noah Harari',        '9780062316097', 22.50, 50, 'https://covers.openlibrary.org/b/isbn/9780062316097-L.jpg',  496, 'historia'),
 ('la-republica',              'La República',                          'Platón',                   '9788420674063', 14.80, 30, 'https://covers.openlibrary.org/b/isbn/9788420674063-L.jpg',  528, 'historia'),
-('zaratustra',                'Así habló Zaratustra',                  'Friedrich Nietzsche',      '9788420651613', 16.40, 24, 'https://covers.openlibrary.org/b/isbn/9788420651613-L.jpg',  432, 'historia'),
+('zaratustra',                'Así habló Zaratustra',                  'Friedrich Nietzsche',      '9788420651613', 16.40, 24, 'https://covers.openlibrary.org/b/isbn/9780140441185-L.jpg?default=false',  432, 'historia'),
 ('meditaciones',              'Meditaciones',                          'Marco Aurelio',            '9788420674049', 12.00, 35, 'https://covers.openlibrary.org/b/isbn/9788420674049-L.jpg',  256, 'historia'),
 ('arte-guerra',               'El arte de la guerra',                  'Sun Tzu',                  '9780486425573',  9.90, 60, 'https://covers.openlibrary.org/b/isbn/9780486425573-L.jpg',  100, 'historia'),
 ('critica-razon-pura',        'Crítica de la razón pura',              'Immanuel Kant',            '9788430942237', 26.00, 12, 'https://covers.openlibrary.org/b/isbn/9788430942237-L.jpg',  690, 'historia'),
@@ -238,20 +240,68 @@ INSERT INTO tb_libro
 
 -- =================== 9) MANGA (10) ===================
 ('one-piece-1',               'One Piece — Tomo 1',                    'Eiichiro Oda',             '9784088725093',  9.90, 80, 'https://covers.openlibrary.org/b/isbn/9784088725093-L.jpg',  216, 'manga'),
-('naruto-1',                  'Naruto — Tomo 1',                       'Masashi Kishimoto',        '9784088725369',  8.90, 70, 'https://covers.openlibrary.org/b/isbn/9784088725369-L.jpg',  200, 'manga'),
+('naruto-1',                  'Naruto — Tomo 1',                       'Masashi Kishimoto',        '9784088725369',  8.90, 70, 'https://covers.openlibrary.org/b/isbn/9781591163589-L.jpg?default=false',  200, 'manga'),
 ('berserk-1',                 'Berserk — Volumen 1',                   'Kentaro Miura',            '9781593070205', 12.50, 40, 'https://covers.openlibrary.org/b/isbn/9781593070205-L.jpg',  232, 'manga'),
-('hajime-ippo-1',             'Hajime no Ippo — Tomo 1',               'George Morikawa',          '9784063340303',  9.50, 30, 'https://covers.openlibrary.org/b/isbn/9784063340303-L.jpg',  200, 'manga'),
-('dragon-ball-1',             'Dragon Ball — Tomo 1',                  'Akira Toriyama',           '9784088722405',  8.90, 65, 'https://covers.openlibrary.org/b/isbn/9784088722405-L.jpg',  192, 'manga'),
+('hajime-ippo-1',             'Hajime no Ippo — Tomo 1',               'George Morikawa',          '9784063340303',  9.50, 30, 'https://covers.openlibrary.org/b/isbn/9781632361424-L.jpg?default=false',  200, 'manga'),
+('dragon-ball-1',             'Dragon Ball — Tomo 1',                  'Akira Toriyama',           '9784088722405',  8.90, 65, 'https://covers.openlibrary.org/b/isbn/9781569319208-L.jpg?default=false',  192, 'manga'),
 ('vagabond-1',                'Vagabond — Volumen 1',                  'Takehiko Inoue',           '9781421520544', 11.50, 28, 'https://covers.openlibrary.org/b/isbn/9781421520544-L.jpg',  200, 'manga'),
 ('death-note-1',              'Death Note — Volumen 1',                'Tsugumi Ohba & Takeshi Obata', '9781421501680', 10.20, 50, 'https://covers.openlibrary.org/b/isbn/9781421501680-L.jpg', 195, 'manga'),
 ('attack-titan-1',            'Attack on Titan — Volumen 1',           'Hajime Isayama',           '9781935654513', 10.90, 60, 'https://covers.openlibrary.org/b/isbn/9781935654513-L.jpg',  208, 'manga'),
 ('bleach-1',                  'Bleach — Volumen 1',                    'Tite Kubo',                '9781591164418',  9.20, 42, 'https://covers.openlibrary.org/b/isbn/9781591164418-L.jpg',  192, 'manga'),
 ('fullmetal-1',               'Fullmetal Alchemist — Volumen 1',       'Hiromu Arakawa',           '9781591169208', 10.50, 38, 'https://covers.openlibrary.org/b/isbn/9781591169208-L.jpg',  192, 'manga');
 
+-- =====================================================================
+-- 8. Pedidos semilla — un par de compras del usuario CLIENTE
+--    para que el perfil/admin tengan algo que mostrar de entrada.
+-- =====================================================================
+WITH cliente AS (
+    SELECT id FROM tb_usuario WHERE correo = 'cliente@folio.ec' LIMIT 1
+)
+INSERT INTO tb_pedido (usuario_id, subtotal, iva, total, estado, marca_tarjeta, ultimos4)
+SELECT id, 38.40, 5.76, 44.16, 'PAGADO', 'VISA', '4242' FROM cliente
+UNION ALL
+SELECT id, 22.50, 3.38, 25.88, 'ENTREGADO', 'MASTERCARD', '5454' FROM cliente;
+
+-- Las dos cabeceras anteriores reciben ids consecutivos. Sus líneas:
+WITH p1 AS (
+    SELECT id FROM tb_pedido WHERE marca_tarjeta = 'VISA' AND ultimos4 = '4242' LIMIT 1
+), p2 AS (
+    SELECT id FROM tb_pedido WHERE marca_tarjeta = 'MASTERCARD' AND ultimos4 = '5454' LIMIT 1
+)
+INSERT INTO tb_pedido_item (pedido_id, libro_id, cantidad, precio_unitario)
+SELECT id, 'cien-anios-soledad', 1, 18.90 FROM p1
+UNION ALL
+SELECT id, 'el-aleph',           1, 15.50 FROM p1
+UNION ALL
+SELECT id, 'sapiens',            1, 22.50 FROM p2;
+
+-- =====================================================================
+-- 9. Hot-fix de portadas — algunas URLs ISBN-based de Open Library
+--    no devolvían imagen. Las reemplazamos por URLs estables.
+-- =====================================================================
+-- Open Library expone su CDN para hotlinking. Con ?default=false devuelve
+-- 404 si no hay portada → el <object> en el frontend muestra el fallback
+-- dorado en lugar del icono de imagen rota.
+
+UPDATE tb_libro SET imagen = 'https://covers.openlibrary.org/b/isbn/9780140441185-L.jpg?default=false'
+ WHERE id = 'zaratustra';
+
+UPDATE tb_libro SET imagen = 'https://covers.openlibrary.org/b/isbn/9781591163589-L.jpg?default=false'
+ WHERE id = 'naruto-1';
+
+UPDATE tb_libro SET imagen = 'https://covers.openlibrary.org/b/isbn/9781632361424-L.jpg?default=false'
+ WHERE id = 'hajime-ippo-1';
+
+UPDATE tb_libro SET imagen = 'https://covers.openlibrary.org/b/isbn/9781569319208-L.jpg?default=false'
+ WHERE id = 'dragon-ball-1';
+
 -- ---------------------------------------------------------------------
--- 8. Verificación rápida (no falla — sólo informa)
+-- 10. Verificación rápida (no falla — sólo informa)
 -- ---------------------------------------------------------------------
 SELECT categoria, COUNT(*) AS total
 FROM tb_libro
 GROUP BY categoria
 ORDER BY categoria;
+
+SELECT rol, COUNT(*) AS cuentas FROM tb_usuario GROUP BY rol;
+SELECT COUNT(*) AS pedidos_semilla FROM tb_pedido;
