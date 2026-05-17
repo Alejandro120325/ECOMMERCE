@@ -1,11 +1,3 @@
-<%--
-    index.jsp
-    FOLIO - Home (CERO JavaScript)
-    ------------------------------------------------------------------
-    * Sin <script>, sin onclick, sin atributos onerror/onload.
-    * El carrito, el drawer y los formularios son 100% server-side.
-    * Las animaciones, dropdowns y libro 3D se resuelven con CSS3 puro.
---%>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%@ page import="ec.edu.ups.modelo.Usuario, ec.edu.ups.modelo.Libro, ec.edu.ups.modelo.Carrito,
                  ec.edu.ups.dao.LibroDAO, ec.edu.ups.controlador.CarritoServlet,
@@ -30,7 +22,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FOLIO | Biblioteca Digital</title>
-    <link rel="stylesheet" href="css/estilos.css?v=60">
+    <link rel="stylesheet" href="css/estilos.css?v=110">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">

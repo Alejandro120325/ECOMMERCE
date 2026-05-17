@@ -1,18 +1,12 @@
 /* =========================================================
    FOLIO - Biblioteca Digital
-   Hoja de estilos (CERO JavaScript)
-   ---------------------------------------------------------
-   Paleta DARK & GOLD aplicada por defecto.
-   Toda la interacción (libro 3D, dropdowns, drawer, animaciones)
-   resuelta con CSS3 puro: :hover, :focus-within, transitions y
-   keyframes.
    ========================================================= */
 
 /* ---------- Variables Globales: paleta DARK (default) ---------- */
 :root, body.dark {
-    --color-primario:     #0b0b13;   /* casi negro azulado */
+    --color-primario:     #0b0b13;
     --color-secundario:   #141420;
-    --color-acento:       #d4af6a;   /* oro premium */
+    --color-acento:       #d4af6a;
     --color-acento-hover: #e8c785;
     --color-acento-soft:  rgba(212, 175, 106, 0.18);
     --color-fondo:        #07070d;
@@ -40,21 +34,17 @@
 }
 
 /* ---------- Paleta LIGHT (Cream & Gold) — contraste AA/AAA verificado ----------
-   Cuerpo del texto:  #1a1a2e sobre #faf6ef  → ratio 14.4:1  (AAA)
-   Texto suave:       #4a4a55 sobre #faf6ef  → ratio  7.8:1  (AAA)
-   Texto sobre cards: #1a1a2e sobre #ffffff  → ratio 16.1:1  (AAA)
-   Acento dorado:     #8a6b30 sobre #faf6ef  → ratio  4.9:1  (AA)
    ------------------------------------------------------------ */
 body.light {
-    --color-primario:     #1a1a26;
-    --color-secundario:   #2a2a3e;
-    --color-acento:       #8a6b30;   /* oro oscurecido para contrastar sobre cream */
-    --color-acento-hover: #6f5523;
-    --color-acento-soft:  rgba(138, 107, 48, 0.12);
-    --color-fondo:        #faf6ef;
+    --color-primario:     #14142b;
+    --color-secundario:   #1f1f33;
+    --color-acento:       #a67c52;
+    --color-acento-hover: #8a6442;
+    --color-acento-soft:  rgba(166, 124, 82, 0.12);
+    --color-fondo:        #f7f7f7;
     --color-superficie:   #ffffff;
-    --color-texto:        #1a1a2e;   /* casi-negro azulado, AAA */
-    --color-texto-suave:  #4a4a55;   /* gris carbón, AAA */
+    --color-texto:        #14142b;
+    --color-texto-suave:  #4a4a55;
     --color-blanco:       #ffffff;
     --color-borde:        #d9d0bf;
     --color-aside-texto:  #f5f1ea;
@@ -72,13 +62,6 @@ body.light {
 
 /* ============================================================
    CONTRASTE LIGHT THEME — WCAG AA / AAA garantizado
-   ------------------------------------------------------------
-   Reglas:
-   * Donde el fondo es OSCURO en ambos temas (hero, body>header,
-     .stats-bar, aside, carrito-header, sidebar, footer, banner
-     dorado newsletter): texto SIEMPRE claro (#fff / #f5e6c8).
-   * Donde el fondo es CLARO en light theme (cards, panels, inputs,
-     tablas, body): texto SIEMPRE oscuro (#14142b / #1a1a2e).
    ============================================================ */
 
 /* ---------- LIGHT: contraste sobre superficies CLARAS ---------- */
@@ -106,9 +89,7 @@ body.light .red-info small { color: var(--color-texto-suave); }
 body.light .form-grupo label  { color: var(--color-titulos); font-weight: 700; }
 body.light .form-container .subtitulo { color: var(--color-texto-suave); }
 
-/* ---------- LIGHT: contraste sobre superficies OSCURAS (sin tocar) ----------
-   El hero, el header principal, la stats-bar, el aside, el carrito
-   y el footer conservan fondo oscuro en ambos temas → texto claro. */
+/* ---------- LIGHT: contraste sobre superficies OSCURAS (sin tocar) ---------- */
 body.light .hero,
 body.light .hero h2, body.light .hero p,
 body.light .hero .hero-badge,
@@ -124,7 +105,7 @@ body.light .pago-tarjeta, body.light .pago-tarjeta * {
     color: #f5e6c8;
 }
 body.light .hero h2 { color: #ffffff; }
-body.light .hero .btn-hero { color: #1a1a2e !important; }   /* botón dorado: texto navy */
+body.light .hero .btn-hero { color: #1a1a2e !important; }
 body.light body > header nav ul li a { color: #ffffff; }
 body.light .stat-card .stat-num { color: var(--color-acento); }
 body.light .stat-card i          { color: var(--color-acento); }
@@ -280,10 +261,7 @@ a  { text-decoration: none; color: var(--color-acento); transition: var(--transi
 a:hover { color: var(--color-acento-hover); }
 
 /* ============================================================
-   HEADER & NAV — SOLO el header principal del sitio (hijo directo
-   de <body>). Esto evita que <header class="catalogo-titulo">
-   dentro de <main> herede sticky/z-index/fondo oscuro y bloquee
-   el dropdown del menú "Catálogo".
+   HEADER & NAV — SOLO el header principal del sitio
    ============================================================ */
 body > header {
     background: linear-gradient(135deg, var(--color-primario) 0%, var(--color-secundario) 100%);
@@ -294,8 +272,7 @@ body > header {
     border-bottom: 1px solid rgba(212,175,106,0.15);
 }
 
-/* Cualquier otro <header> dentro del body (catalogo-titulo, etc.)
-   no debe arrastrar fondo, sticky ni z-index del header principal. */
+/* Cualquier otro <header> dentro del body (catalogo-titulo, etc.) */
 main header, section header, article header {
     background: transparent !important;
     color: inherit !important;
@@ -354,8 +331,6 @@ nav ul li a:hover::after { width: 60%; }
     z-index: 2000;
     border: 1px solid rgba(212,175,106,0.25);
     border-top: 3px solid var(--color-acento);
-    /* Pequeño "puente" invisible para que el hover no se rompa al
-       desplazar el cursor entre el botón y el menú. */
     margin-top: 0;
 }
 .dropdown-menu::before {
@@ -579,12 +554,6 @@ aside ul li a:hover {
 
 /* ============================================================
    CATÁLOGO 3D — Libro tridimensional con rotación en hover
-   ------------------------------------------------------------
-   Cada .libro-card aloja seis caras (front, back, spine,
-   fore-edge, top, bottom) compuestas como un objeto 3D real.
-   Al pasar el cursor sobre la tarjeta, el .libro-3d gira
-   continuamente sobre su eje Y mediante una animación CSS.
-   No se usa una sola línea de JavaScript.
    ============================================================ */
 .catalogo-main { max-width: 1300px; margin: 2rem auto; padding: 0 1.5rem; flex: 1; }
 .catalogo-titulo { text-align: center; margin-bottom: 2.5rem; }
@@ -677,7 +646,7 @@ aside ul li a:hover {
 .libro-3d {
     --book-w: 180px;
     --book-h: 270px;
-    --book-d: 30px;   /* se sobrescribe inline según número de páginas */
+    --book-d: 30px;
     width: var(--book-w);
     height: var(--book-h);
     transform-style: preserve-3d;
@@ -1390,25 +1359,9 @@ footer {
 
 /* ============================================================
    DASHBOARDS (admin / empleado) — Glass + Gold "Executive Console"
-   ------------------------------------------------------------
-   * Grid principal: 280px (sidebar) + 1fr (contenido)
-   * minmax(0, 1fr) en el track de contenido — IMPRESCINDIBLE
-     para que las tablas dejen de empujar el ancho y respeten
-     el contenedor (sin scrollbar horizontal forzado en desktop).
-   * Las tablas usan `table-layout: auto` con `width:100%` y
-     `min-width:0`, expandiéndose de forma natural.
-   * `overflow-x: auto` se aplica SOLO en móvil (<900px).
    ============================================================ */
 /* ============================================================
    DASHBOARD CONTAINER — Simetría total + sin cortes verticales
-   ------------------------------------------------------------
-   * min-height: calc(100vh - 200px) garantiza que el área de
-     trabajo ocupe la pantalla aunque el contenido sea corto.
-   * box-sizing: border-box evita que los paddings empujen los
-     hijos fuera del contenedor.
-   * padding simétrico vertical y horizontal con margen
-     de seguridad inferior para que la columna del sidebar no
-     se vea "huérfana" al final de la página.
    ============================================================ */
 .dashboard-container {
     display: grid;
@@ -1417,10 +1370,10 @@ footer {
     max-width: 1400px;
     margin: 0 auto;
     width: 100%;
-    padding: 2.5rem 1.5rem 4rem;     /* superior 2.5 + inferior 4rem = respiración */
-    align-items: stretch;             /* sidebar y main misma altura mínima */
+    padding: 2.5rem 1.5rem 4rem;
+    align-items: stretch;
     box-sizing: border-box;
-    min-height: calc(100vh - 220px);  /* header(~88px) + footer(~120px) */
+    min-height: calc(100vh - 220px);
     flex: 1;
 }
 .dashboard-container,
@@ -1447,7 +1400,7 @@ footer {
     min-height: 100%;
     align-self: stretch;
     height: auto !important;
-    position: relative;        /* ya no es sticky por defecto en este layout */
+    position: relative;
     top: auto;
 }
 /* En pantallas grandes, sí queremos sticky pero sin recortar */
@@ -1550,7 +1503,7 @@ footer {
 
 /* ---- Main content ---- */
 .main-content {
-    min-width: 0;          /* permite encoger el track del grid */
+    min-width: 0;
     display: flex; flex-direction: column;
 }
 .admin-section, .empleado-section {
@@ -1626,8 +1579,6 @@ footer {
     box-shadow:
         0 14px 36px rgba(0, 0, 0, 0.55),
         inset 0 1px 0 rgba(255, 255, 255, 0.04);
-    /* IMPORTANTE: ya no se fuerza overflow-x.
-       Las tablas se expanden naturalmente en desktop. */
     min-width: 0;
     position: relative;
 }
@@ -1705,15 +1656,23 @@ tbody tr:hover {
     border: 1px solid rgba(23, 162, 184, 0.35);
 }
 
+/* --- ACTION BUTTON --- */
 .btn-accion {
-    padding: 0.5rem 0.95rem;
+    padding: 0.55rem 1.1rem;
     border: 1px solid transparent;
     border-radius: 8px;
-    cursor: pointer; font-size: 0.85rem; font-weight: 600;
-    transition: all 0.3s cubic-bezier(.2, .9, .25, 1);
-    display: inline-flex; align-items: center; gap: 0.45rem;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    line-height: 1.2;
+    transition: all 0.35s cubic-bezier(.2, .9, .25, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
     text-decoration: none;
+    white-space: nowrap;
 }
+.btn-accion i { flex-shrink: 0; }
 .btn-primario {
     background: linear-gradient(135deg, var(--color-acento), var(--color-acento-hover));
     color: #0b0b13;
@@ -1749,10 +1708,6 @@ tbody tr:hover {
 
 /* ============================================================
    SCROLLBAR PERSONALIZADO (global) — Dark & Gold minimalista
-   ------------------------------------------------------------
-   Webkit (Chrome/Edge/Safari) + Firefox.  Reemplaza la barra
-   gris nativa de Windows/Tomcat por una pieza fina con thumb
-   degradado dorado que se ilumina sutilmente al hover.
    ============================================================ */
 * {
     /* Firefox */
@@ -1801,9 +1756,6 @@ tbody tr:hover {
 
 /* ============================================================
    GLASSMORPHISM aplicado a las tarjetas de marketing del Home
-   ------------------------------------------------------------
-   Sobrescribe los .benefit-card / .step para alinearlos con la
-   estética "consola ejecutiva" de los dashboards.
    ============================================================ */
 .benefit-card,
 .step,
@@ -1886,9 +1838,6 @@ nav ul li a {
 
 /* ============================================================
    REDES SOCIALES PREMIUM (contacto.jsp)
-   ------------------------------------------------------------
-   Grid simétrico de tarjetas con icono circular dorado, hover
-   con escala y resplandor neón. Reemplaza el listado plano.
    ============================================================ */
 .redes-premium {
     display: grid;
@@ -1977,12 +1926,12 @@ nav ul li a {
    ============================================================ */
 .home-section.why-folio,
 .home-section.steps {
-    padding: 0 2rem;            /* nunca pegado a los bordes */
-    max-width: 1240px;          /* leve aumento para mejor respiración */
+    padding: 0 2rem;
+    max-width: 1240px;
 }
 .benefits-grid {
     padding: 0.5rem 0;
-    gap: 1.8rem;                /* aire entre tarjetas */
+    gap: 1.8rem;
 }
 .benefit-card { padding: 2.2rem 1.8rem; }
 .steps-grid   { padding: 1rem 0.5rem; }
@@ -1995,10 +1944,6 @@ nav ul li a {
 
 /* ============================================================
    REFUERZO SIMETRÍA DASHBOARDS
-   ------------------------------------------------------------
-   El refactor anterior ya quitó el min-width forzado de las
-   tablas. Aquí garantizamos que NUNCA aparezca scroll-x en
-   desktop y normalizamos paddings/anchos.
    ============================================================ */
 .admin-panel { overflow: visible !important; }
 .admin-section table,
@@ -2147,15 +2092,90 @@ body.light .metodo-info small  { color: var(--color-texto-suave); }
         inset 0 0 12px rgba(212, 175, 106, 0.18);
 }
 
+/* --- LANGUAGE FLAGS (CSS-only, sin imágenes externas) --- */
+.banderas-i18n {
+    display: inline-flex !important;
+    gap: 0.35rem;
+    align-items: center;
+}
+.bandera-link {
+    display: inline-flex;
+    align-items: center; justify-content: center;
+    padding: 4px;
+    border-radius: 50%;
+    border: 1px solid rgba(212, 175, 106, 0.25);
+    background: transparent;
+    transition: all 0.4s var(--ease-prem);
+    opacity: 0.55;
+}
+.bandera-link:hover {
+    opacity: 1;
+    border-color: var(--color-acento);
+    background: var(--color-acento-soft);
+    transform: translateY(-1px);
+    box-shadow: 0 0 14px rgba(212, 175, 106, 0.45);
+}
+.bandera-link.activo {
+    opacity: 1;
+    border-color: var(--color-acento);
+    box-shadow:
+        0 0 0 2px rgba(212, 175, 106, 0.35),
+        0 0 14px rgba(212, 175, 106, 0.5);
+}
+.bandera {
+    display: inline-block;
+    width: 24px; height: 18px;
+    border-radius: 3px;
+    border: 1px solid rgba(0, 0, 0, 0.35);
+    overflow: hidden;
+    position: relative;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+    flex-shrink: 0;
+}
+
+/* Bandera de España: 3 franjas horizontales rojo/amarillo/rojo (1:2:1) */
+.flag-es {
+    background:
+        linear-gradient(
+            to bottom,
+            #aa151b 0,    #aa151b 25%,
+            #f1bf00 25%,  #f1bf00 75%,
+            #aa151b 75%,  #aa151b 100%
+        );
+}
+
+/* Bandera de USA: 13 franjas rojo/blanco + cantón azul */
+.flag-us {
+    background:
+        repeating-linear-gradient(
+            to bottom,
+            #b22234 0,
+            #b22234 calc(100% / 13),
+            #ffffff calc(100% / 13),
+            #ffffff calc(2 * 100% / 13)
+        );
+}
+.flag-us::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 40%; height: calc(7 * 100% / 13);
+    background: #3c3b6e;
+}
+.flag-us::after {
+    content: '';
+    position: absolute;
+    top: 6%; left: 6%;
+    width: 32%; height: calc(7 * 100% / 13 - 12%);
+    background-image:
+        radial-gradient(circle, #fff 0.5px, transparent 0.8px);
+    background-size: 18% 22%;
+    background-position: 0 0;
+    opacity: 0.9;
+}
+
 /* ============================================================
    Z-INDEX BLINDADO — el dropdown del Catálogo SIEMPRE encima
-   ------------------------------------------------------------
-   Causa raíz vista en pruebas: cuando se hace scroll, el banner
-   del catálogo entraba sobre el dropdown. Lo resolvemos:
-     · header en su propio stacking context (isolation: isolate)
-     · z-index del header bien por encima de cualquier sección
-     · z-index del dropdown aún más alto, asegurado
-     · overflow: visible explícito en header y nav para evitar clipping
    ============================================================ */
 body > header {
     z-index: 9000;
@@ -2176,20 +2196,6 @@ body > header .dropdown { position: relative; z-index: 9100; }
 
 /* ============================================================
    COVER — Portada con FALLBACK NATIVO SIN JAVASCRIPT
-   ------------------------------------------------------------
-   Estrategia:
-     1) <object data="url"> intenta cargar la imagen. Si carga,
-        renderiza la imagen.
-     2) Si la URL falla (404, CORS, hotlinking bloqueado), el
-        navegador renderiza automáticamente el contenido interno
-        del <object>: un <span class="cover-fallback"> que pinta
-        un gradiente oscuro/dorado con el título del libro
-        centrado en tipografía Playfair.
-   * Nunca se ve el icono nativo de imagen rota.
-   * Cero JavaScript. Estándar HTML 4.01+.
-   * Si por algún motivo (navegadores muy antiguos) <object> no
-     pudiera procesar type=image/jpeg, hay además un span
-     "permanente" detrás (.cover-fallback-bg) con z-index 0.
    ============================================================ */
 .libro-3d .face.front {
     background: linear-gradient(135deg, #2a1d12 0%, #1a1a2e 60%, #0e0e14 100%);
@@ -2207,16 +2213,10 @@ body > header .dropdown { position: relative; z-index: 9100; }
     pointer-events: none;   /* nunca capta clicks → no roba al libro 3D */
     background: transparent;
 }
-/* Si el navegador interpreta <object> como un elemento que
-   también renderiza imagen, hacemos que se comporte exactamente
-   como un <img> con object-fit: cover. */
 .libro-3d .face.front .cover-obj img,
 .libro-3d .face.front .cover-obj { object-fit: cover; object-position: center; }
 
-/* Fallback PREMIUM — visible siempre detrás del <object>.
-   Cuando el <object> renderiza la imagen, ésta lo cubre.
-   Cuando el <object> falla, su contenido interno (también un
-   .cover-fallback) se renderiza encima con el mismo aspecto. */
+/* Fallback PREMIUM — visible siempre detrás del <object>.*/
 .libro-3d .face.front .cover-fallback {
     position: absolute; inset: 0;
     z-index: 1;
@@ -2284,13 +2284,6 @@ body > header .dropdown { position: relative; z-index: 9100; }
 
 /* ============================================================
    CONTRASEÑA con CSS CHECKBOX HACK (cero JavaScript)
-   ------------------------------------------------------------
-   El <input> que aparenta ser de tipo password es realmente
-   type="text" + -webkit-text-security: disc. Un <input type="checkbox">
-   oculto cambia el security state vía :checked + sibling selector.
-   Compatibilidad: Chrome/Edge/Safari (WebKit) y Firefox 119+.
-   Para FF antiguo el campo se ve en texto plano (degradación
-   aceptable — sigue funcionando como contraseña sin reveladores).
    ============================================================ */
 .campo-clave {
     position: relative;
@@ -2346,6 +2339,339 @@ body > header .dropdown { position: relative; z-index: 9100; }
 .campo-clave:focus-within .ojo {
     color: var(--color-acento);
 }
+
+/* ============================================================
+   ZONA DE PELIGRO — Eliminar cuenta
+   ============================================================ */
+.admin-panel.zona-peligro {
+    border-color: rgba(218, 54, 51, 0.35) !important;
+    box-shadow:
+        0 14px 36px rgba(0, 0, 0, 0.5),
+        0 0 22px rgba(218, 54, 51, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+.admin-panel.zona-peligro::before {
+    background: linear-gradient(90deg, transparent, #da3633 30%, #da3633 70%, transparent) !important;
+}
+.aviso-peligro {
+    background: rgba(218, 54, 51, 0.08);
+    border: 1px dashed rgba(218, 54, 51, 0.35);
+    border-radius: 10px;
+    padding: 1.2rem 1.4rem;
+    margin-bottom: 1.5rem;
+}
+.aviso-peligro p { margin: 0 0 0.6rem; color: var(--color-texto); }
+.aviso-peligro p strong { color: #ff8b88; }
+.aviso-peligro ul { margin: 0 0 0.8rem 1.4rem; color: var(--color-texto-suave); }
+.aviso-peligro ul li { margin-bottom: 0.25rem; }
+body.light .aviso-peligro {
+    background: rgba(218, 54, 51, 0.06);
+    border-color: rgba(218, 54, 51, 0.30);
+}
+body.light .aviso-peligro p strong { color: #a4231e; }
+
+/* --- FOTO DE PERFIL (cliente) --- */
+.foto-perfil-grupo {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 1.4rem;
+    align-items: center;
+    padding: 1rem;
+    background: var(--color-acento-soft);
+    border-radius: 12px;
+    border: 1px solid rgba(212, 175, 106, 0.22);
+}
+.foto-perfil-actual { display: flex; justify-content: center; }
+.foto-actual,
+.foto-placeholder {
+    width: 110px; height: 110px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--color-acento);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5),
+                0 0 22px rgba(212, 175, 106, 0.3);
+}
+.foto-placeholder {
+    background: linear-gradient(135deg, var(--color-primario), var(--color-secundario));
+    display: flex; align-items: center; justify-content: center;
+    color: var(--color-acento); font-size: 3rem;
+}
+.foto-perfil-input { display: flex; flex-direction: column; gap: 0.4rem; }
+.foto-perfil-input label {
+    color: var(--color-titulos); font-weight: 700;
+    display: flex; align-items: center; gap: 0.5rem;
+}
+.foto-perfil-input input[type="file"] {
+    background: var(--color-superficie) !important;
+    color: var(--color-texto) !important;
+    border: 1px dashed var(--color-acento) !important;
+    padding: 0.7rem !important;
+    cursor: pointer;
+    border-radius: 8px;
+}
+body.light .foto-perfil-grupo { background: rgba(166, 124, 82, 0.06); }
+
+/* ============================================================
+   SELECT / OPTION — contraste forzado en ambos temas
+   ------------------------------------------------------------
+   Sobrescribimos las variaciones nativas del SO. El control
+   <select> aparenta diseño FOLIO, y los <option> dentro del
+   dropdown nativo se pintan oscuro/claro según el tema.
+   ============================================================ */
+select {
+    -webkit-appearance: none;
+    -moz-appearance:    none;
+    appearance:         none;
+    background-color:   var(--color-superficie);
+    color:              var(--color-texto);
+    background-image:
+        linear-gradient(45deg, transparent 50%, var(--color-acento) 50%),
+        linear-gradient(135deg, var(--color-acento) 50%, transparent 50%);
+    background-position:
+        calc(100% - 18px) center,
+        calc(100% - 12px) center;
+    background-size: 6px 6px, 6px 6px;
+    background-repeat: no-repeat;
+    padding-right: 2.4rem !important;
+    cursor: pointer;
+}
+
+/* Las opciones del dropdown nativo del SO (Chrome / Edge / Firefox) */
+select option {
+    background-color: #14141d;
+    color:            #ffffff;
+    padding:          0.6rem 0.8rem;
+    font-weight:      500;
+}
+select option:hover,
+select option:checked,
+select option:focus {
+    background:       linear-gradient(0deg, #d4af6a 0%, #d4af6a 100%);
+    color:            #0b0b13;
+}
+select option:disabled {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+/* Tema CLARO: opciones blancas con texto navy */
+body.light select option {
+    background-color: #ffffff;
+    color:            #14142b;
+}
+body.light select option:hover,
+body.light select option:checked,
+body.light select option:focus {
+    background: #a67c52;
+    color:      #ffffff;
+}
+
+/* Tema CLARO: el control select propio */
+body.light select {
+    background-color: #ffffff !important;
+    color:            #14142b !important;
+    border-color:     var(--color-borde) !important;
+}
+
+/* --- LOGO LEGIBLE EN AMBOS TEMAS --- */
+.logo h1 {
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5),
+                 0 0 16px rgba(212, 175, 106, 0.25);
+}
+.logo h1 span {
+    text-shadow: 0 0 14px rgba(212, 175, 106, 0.55),
+                 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+body.light .logo h1 {
+    color: #f3e4c2 !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.55),
+                 0 0 18px rgba(166, 124, 82, 0.45);
+}
+body.light .logo h1 span {
+    color: #a67c52 !important;
+    text-shadow: 0 0 16px rgba(166, 124, 82, 0.75),
+                 0 1px 2px rgba(0, 0, 0, 0.7);
+}
+.logo .fa-book-open {
+    filter: drop-shadow(0 0 8px rgba(212, 175, 106, 0.55));
+}
+body.light .logo .fa-book-open {
+    filter: drop-shadow(0 0 12px rgba(166, 124, 82, 0.85))
+            drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+}
+.logo-subtitle { text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5); }
+body.light .logo-subtitle {
+    color: #a67c52 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55);
+}
+
+/* --- ADMIN ACTIONS COLUMN --- */
+.admin-section table td:last-child,
+.empleado-section table td:last-child {
+    width: 150px;
+    min-width: 130px;
+    max-width: 160px;
+    white-space: nowrap;
+    padding-right: 1rem !important;
+}
+.admin-section table .form-inline,
+.empleado-section table .form-inline {
+    display: block;
+    margin: 0;
+    width: 100%;
+}
+.admin-section table td:last-child > div,
+.empleado-section table td:last-child > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    width: 100%;
+    max-width: 130px;
+}
+.admin-section table td:last-child .btn-accion,
+.empleado-section table td:last-child .btn-accion {
+    width: 100%;
+    padding: 0.5rem 0.7rem;
+    justify-content: center;
+    font-size: 0.78rem;
+    white-space: nowrap;
+}
+
+/* ============================================================
+   PANEL CONTAINMENT — la tabla NUNCA desborda
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; }
+
+.admin-panel {
+    padding: 1.8rem 2rem;
+    max-width: 100%;
+    overflow: hidden;
+}
+.admin-panel > * { max-width: 100%; }
+.admin-section, .empleado-section { width: 100%; max-width: 100%; }
+.admin-section table, .empleado-section table {
+    width: 100%; max-width: 100%;
+    table-layout: fixed;
+}
+.admin-section table th,
+.admin-section table td,
+.empleado-section table th,
+.empleado-section table td {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    padding: 0.95rem 0.85rem;
+}
+.admin-section table td:last-child,
+.empleado-section table td:last-child {
+    min-width: 0;
+    padding-right: 0.9rem;
+}
+.admin-section table td:last-child > div,
+.empleado-section table td:last-child > div {
+    display: inline-flex; flex-wrap: wrap; gap: 0.45rem;
+    align-items: center;
+    max-width: 100%;
+}
+
+/* En móvil/tablet, scroll-x permitido sin romper el contenedor */
+@media (max-width: 1024px) {
+    .admin-panel { overflow-x: auto; }
+    .admin-section table, .empleado-section table { table-layout: auto; min-width: 760px; }
+}
+
+/* ============================================================
+   UI POLISH PREMIUM — consola ejecutiva
+   ============================================================ */
+:root {
+    --ease-prem:   cubic-bezier(0.25, 1, 0.5, 1);
+    --shadow-flt:  0 6px 18px rgba(0, 0, 0, 0.32);
+    --shadow-hov:  0 18px 44px rgba(0, 0, 0, 0.55),
+                   0 0 28px rgba(212, 175, 106, 0.14);
+    --glow-gold:   0 0 0 1px rgba(212, 175, 106, 0.45),
+                   0 0 18px rgba(212, 175, 106, 0.35),
+                   0 0 36px rgba(212, 175, 106, 0.18);
+    --glass-dark:  linear-gradient(135deg,
+                       rgba(20, 20, 29, 0.62),
+                       rgba(11, 11, 19, 0.48));
+    --glass-light: linear-gradient(135deg,
+                       rgba(255, 255, 255, 0.92),
+                       rgba(245, 240, 230, 0.82));
+}
+body.light {
+    --shadow-flt: 0 6px 18px rgba(26, 26, 46, 0.10);
+    --shadow-hov: 0 18px 44px rgba(26, 26, 46, 0.20),
+                  0 0 28px rgba(138, 107, 48, 0.12);
+    --glow-gold:  0 0 0 1px rgba(138, 107, 48, 0.4),
+                  0 0 18px rgba(138, 107, 48, 0.22),
+                  0 0 36px rgba(138, 107, 48, 0.10);
+}
+
+/* --- TRANSICIONES UNIFICADAS --- */
+button, a.btn, a.btn-accion, a.btn-hero, a.btn-link, a.btn-carrito,
+.libro-card, .kpi-card, .benefit-card, .step, .testimonio,
+.red-card, .filtros-categoria a, .metodo-pago, .admin-panel,
+.sidebar ul li a, tbody tr, .form-grupo input, .form-grupo select,
+.form-grupo textarea, .dropdown-menu li a, .btn-tema {
+    transition: all 0.4s var(--ease-prem);
+}
+
+/* --- GLASSMORPHISM PROFUNDO --- */
+.kpi-card, .admin-panel, .sidebar,
+.benefit-card, .step, .testimonio, .red-card,
+.form-container, .metodo-pago {
+    background: var(--glass-dark);
+    backdrop-filter: blur(26px) saturate(170%);
+    -webkit-backdrop-filter: blur(26px) saturate(170%);
+    border: 1px solid rgba(212, 175, 106, 0.22);
+    box-shadow: var(--shadow-flt);
+}
+body.light .kpi-card, body.light .admin-panel, body.light .sidebar,
+body.light .benefit-card, body.light .step, body.light .testimonio,
+body.light .red-card, body.light .form-container, body.light .metodo-pago {
+    background: var(--glass-light) !important;
+    border-color: rgba(138, 107, 48, 0.18) !important;
+}
+
+/* --- HOVER LIFTS --- */
+.kpi-card:hover, .benefit-card:hover, .step:hover, .testimonio:hover,
+.libro-card:hover, .red-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-hov);
+    border-color: rgba(212, 175, 106, 0.45);
+}
+
+/* --- NEON GLOW (estados activos / seleccionados) --- */
+.sidebar ul li a.activo,
+.filtros-categoria a.activo,
+.metodo-pago[open],
+.dropdown-menu li a:focus,
+.form-grupo input:focus,
+.form-grupo select:focus,
+.form-grupo textarea:focus {
+    box-shadow: var(--glow-gold);
+}
+
+/* --- FILAS DE TABLA con micro-interaccion --- */
+tbody tr {
+    position: relative;
+}
+tbody tr::before {
+    content: ''; position: absolute;
+    left: 0; top: 0; bottom: 0; width: 3px;
+    background: var(--color-acento);
+    transform: scaleY(0); transform-origin: center;
+    transition: transform 0.4s var(--ease-prem);
+}
+tbody tr:hover {
+    background: rgba(212, 175, 106, 0.06);
+    transform: translateX(2px);
+}
+tbody tr:hover::before { transform: scaleY(1); }
+body.light tbody tr:hover { background: rgba(138, 107, 48, 0.06); }
+
+/* --- ESPACIADO SIMÉTRICO EN SECCIONES HOME --- */
+.home-section { padding: 0 2rem; }
+.section-header { margin-bottom: 3rem; }
+@media (max-width: 720px) { .home-section { padding: 0 1.2rem; } }
 
 /* ============================================================
    MEDIA QUERIES generales

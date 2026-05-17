@@ -1,10 +1,4 @@
-<%--
-    admin.jsp
-    FOLIO - Dashboard de Administración (CERO JavaScript).
-    ------------------------------------------------------------------
-    Navegación por query string (?sec=dashboard|usuarios|ventas|config).
-    Gestión real de cuentas vía POST a GestionUsuariosServlet.
---%>
+<%-- admin.jsp --%>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%@ page import="java.util.List, java.text.SimpleDateFormat,
                  ec.edu.ups.modelo.Usuario, ec.edu.ups.modelo.Carrito, ec.edu.ups.modelo.Pedido,
@@ -33,7 +27,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Admin &middot; FOLIO</title>
-    <link rel="stylesheet" href="css/estilos.css?v=60">
+    <link rel="stylesheet" href="css/estilos.css?v=110">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>

@@ -1,22 +1,4 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
-<%--
-    carrito-drawer.jspf
-    -----------------------------------------------------------------
-    Drawer lateral del carrito de compras renderizado en el servidor.
-
-    Variables esperadas en el scope (las inyecta la JSP host):
-      * carrito          : ec.edu.ups.modelo.Carrito de la sesión
-      * urlActual        : URL del recurso actual (para los redirect)
-      * mostrarDrawer    : boolean — si la URL trae ?carrito=open
-
-    Sin AJAX ni JavaScript:
-      * Cada "+", "-", "Eliminar" es un <form method="POST"> al
-        CarritoServlet con un hidden "redirect" que conserva la
-        página de origen y un "carrito=open" que mantiene el panel
-        visible tras el sendRedirect.
-      * El overlay y el botón "Cerrar" son enlaces a la página actual
-        sin el parámetro carrito=open.
---%>
 <%
     String urlSinDrawer  = urlActual;       // URL para cerrar el drawer
     String urlConDrawer  = urlActual + (urlActual.contains("?") ? "&" : "?") + "carrito=open";

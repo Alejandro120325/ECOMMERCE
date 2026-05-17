@@ -128,6 +128,54 @@ public class UsuarioDAO {
         }
     }
 
+    // --- UPDATE PROFILE ---
+    public boolean actualizarPerfil(Usuario u) {
+        String sql = "UPDATE tb_usuario SET nombre=?, apellido=?, telefono=?, " +
+                     "provincia=?, ciudad=?, direccion=? WHERE id=?";
+        try (Connection con = Conexion.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, u.getNombre());
+            ps.setString(2, u.getApellido());
+            ps.setString(3, u.getTelefono());
+            ps.setString(4, u.getProvincia());
+            ps.setString(5, u.getCiudad());
+            ps.setString(6, u.getDireccion());
+            ps.setInt   (7, u.getId());
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("[UsuarioDAO] actualizarPerfil: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // --- UPDATE PROFILE PHOTO ---
+    public boolean actualizarFotoPerfil(int id, String fotoPerfil) {
+        String sql = "UPDATE tb_usuario SET foto_perfil=? WHERE id=?";
+        try (Connection con = Conexion.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, fotoPerfil);
+            ps.setInt   (2, id);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("[UsuarioDAO] actualizarFotoPerfil: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // --- UPDATE PASSWORD ---
+    public boolean actualizarClave(int id, String nuevaClave) {
+        String sql = "UPDATE tb_usuario SET clave=? WHERE id=?";
+        try (Connection con = Conexion.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, nuevaClave);
+            ps.setInt   (2, id);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("[UsuarioDAO] actualizarClave: " + e.getMessage());
+            return false;
+        }
+    }
+
     public Usuario validarLogin(String correo, String clave) {
         Usuario usr = null;
         String sql = "SELECT * FROM tb_usuario WHERE correo = ? AND clave = ?";

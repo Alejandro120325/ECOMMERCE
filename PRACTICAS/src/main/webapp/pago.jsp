@@ -1,14 +1,4 @@
-<%--
-    pago.jsp
-    FOLIO - Pasarela de pago con 3 métodos (CERO JavaScript).
-    ------------------------------------------------------------------
-    Métodos soportados (cada uno es un <form> POST independiente
-    dentro de un <details> nativo HTML5):
-      a) Tarjeta de crédito/débito  → Luhn + marca + expira + CVV
-      b) Transferencia bancaria EC  → banco + nro comprobante + titular
-      c) PayPal simulado             → email válido
-    Todas las validaciones residen en ProcesarPagoServlet.java.
---%>
+<%-- pago.jsp --%>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%@ page import="ec.edu.ups.modelo.Usuario, ec.edu.ups.modelo.Carrito,
                  ec.edu.ups.controlador.CarritoServlet" %>
@@ -53,7 +43,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pago seguro &middot; FOLIO</title>
-    <link rel="stylesheet" href="css/estilos.css?v=60">
+    <link rel="stylesheet" href="css/estilos.css?v=110">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
@@ -78,9 +68,6 @@
         <div class="mensaje error"><i class="fas fa-exclamation-triangle"></i> <%= mensajeError %></div>
         <% } %>
 
-        <%-- ============================================================
-             MÉTODO 1: TARJETA DE CRÉDITO / DÉBITO
-             ============================================================ --%>
         <details class="metodo-pago" open>
             <summary>
                 <span class="metodo-icon"><i class="fas fa-credit-card"></i></span>
@@ -130,9 +117,6 @@
             </form>
         </details>
 
-        <%-- ============================================================
-             MÉTODO 2: TRANSFERENCIA BANCARIA (Ecuador)
-             ============================================================ --%>
         <details class="metodo-pago">
             <summary>
                 <span class="metodo-icon"><i class="fas fa-university"></i></span>
@@ -192,9 +176,6 @@
             </form>
         </details>
 
-        <%-- ============================================================
-             MÉTODO 3: PAYPAL (simulado)
-             ============================================================ --%>
         <details class="metodo-pago">
             <summary>
                 <span class="metodo-icon" style="background:linear-gradient(135deg,#003087,#0070ba);color:#fff;"><i class="fab fa-paypal"></i></span>
