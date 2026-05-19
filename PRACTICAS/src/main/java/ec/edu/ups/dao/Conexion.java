@@ -7,8 +7,9 @@ import java.util.Properties;
 
 public class Conexion {
 
+    // Se agrega '?sslmode=require' al final de la URL para cumplir con la seguridad de Supabase
     private static final String URL =
-            "jdbc:postgresql://db.ybyfjuskywyauoefjoys.supabase.co:5432/postgres";
+            "jdbc:postgresql://db.ybyfjuskywyauoefjoys.supabase.co:5432/postgres?sslmode=require";
     private static final String USER     = "postgres";
     private static final String PASSWORD = "Alejo1203251809";
 
