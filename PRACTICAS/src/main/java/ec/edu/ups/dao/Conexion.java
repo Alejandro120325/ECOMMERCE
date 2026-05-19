@@ -5,21 +5,12 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-/**
- * FOLIO - Punto único de conexión a PostgreSQL.
- * <p>
- * Configurada explícitamente para que <strong>cliente y servidor
- * intercambien siempre en UTF-8</strong> mediante el parámetro
- * {@code client_encoding=UTF8} y los properties {@code characterEncoding}
- * y {@code allowEncodingChanges}. Esto evita que las tildes y eñes se
- * corrompan al viajar Java &lt;-&gt; PostgreSQL.
- */
 public class Conexion {
 
     private static final String URL =
-            "jdbc:postgresql://localhost:5432/folio_biblioteca";
+            "jdbc:postgresql://db.ybyfjuskywyauoefjoys.supabase.co:5432/postgres";
     private static final String USER     = "postgres";
-    private static final String PASSWORD = "root";
+    private static final String PASSWORD = "Alejo1203251809";
 
     private static final Properties PROPS = new Properties();
     static {
