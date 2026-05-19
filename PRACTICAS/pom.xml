@@ -11,8 +11,8 @@
     <packaging>war</packaging>
 
     <properties>
-        <maven.compiler.source>24</maven.compiler.source>
-        <maven.compiler.target>24</maven.compiler.target>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -24,7 +24,6 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- JSTL 3.0 (Jakarta) - para <c:forEach>, <c:if>, EL avanzado -->
         <dependency>
             <groupId>jakarta.servlet.jsp.jstl</groupId>
             <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
@@ -41,21 +40,11 @@
             <artifactId>postgresql</artifactId>
             <version>42.7.3</version>
         </dependency>
-
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>42.7.3</version>
-        </dependency>
-
     </dependencies>
 
     <build>
         <finalName>FOLIO</finalName>
 
-        <!-- IMPORTANTE: forzamos que src/main/resources/ se copie a target/classes/
-             para que JSTL <fmt:setBundle basename="i18n.messages"/> encuentre los
-             archivos messages_*.properties en el classpath (WEB-INF/classes/i18n/). -->
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -73,7 +62,6 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.4.0</version>
                 <configuration>
-                    <!-- Asegura que WEB-INF/classes/ contiene los bundles i18n -->
                     <webResources>
                         <resource>
                             <directory>${project.build.outputDirectory}</directory>
@@ -84,5 +72,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
