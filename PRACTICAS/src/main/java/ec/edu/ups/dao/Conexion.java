@@ -7,10 +7,12 @@ import java.util.Properties;
 
 public class Conexion {
 
-    // Se agrega '?sslmode=require' al final de la URL para cumplir con la seguridad de Supabase
+    // 1. URL usando el host de AWS, el puerto 6543 del Pooler y el SSL obligatorio
     private static final String URL =
-            "jdbc:postgresql://db.ybyfjuskywyauoefjoys.supabase.co:5432/postgres?sslmode=require";
-    private static final String USER     = "postgres";
+            "jdbc:postgresql://aws-1-us-east-1.pooler.supabase.com:6543/postgres?sslmode=require";
+
+    // 2. IMPORTANTE: El usuario ahora incluye el identificador de tu proyecto de Supabase
+    private static final String USER     = "postgres.ybyfjuskywyauoefjoys";
     private static final String PASSWORD = "Alejo1203251809";
 
     private static final Properties PROPS = new Properties();
